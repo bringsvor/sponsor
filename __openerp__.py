@@ -35,7 +35,9 @@ Module to handle sponsored children. Human Aid.
         'views/partner.xml',
     ],
     'demo': [],
-    'test': [],
+    'test': [
+        'test/sponsor_mapping.yml',
+    ],
     'installable': True,
     'auto_install': False,
 }

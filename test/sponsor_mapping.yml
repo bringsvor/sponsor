@@ -1,0 +1,30 @@
+-
+  Gjedna
+-
+  !record {model: sponsored_child, id: child1}:
+    name: 'Samba'
+    gender: 'male'
+-
+  !record {model: sponsored_child, id: child2}:
+    name: 'Bamba'
+    gender: 'female'
+-
+  The child needs a sponsor initially
+-
+  !assert {model: sponsored_child, id: child1, string: 'Child has no sponsor assigned'}:
+    - needs_sponsor == True
+-
+  !record {model: sponsor, id: sponsor1}:
+    name: 'Cathrine Løland'
+    sponsored_children:
+      - start_date: '2014-01-01'
+        end_date: '2014-08-08'
+        sponsored_child: child1
+      - start_date: '2014-01-02'
+        sponsored_child: child2
+-
+  http://www.zbeanztech.com/blog/how-effective-yaml-testing-openerp
+-
+  !assert {model: sponsored_child, id: child1}:
+    - needs_sponsor == False
+-

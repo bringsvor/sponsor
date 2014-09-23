@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <record id="view_partner_property_form" model="ir.ui.view">
+        <record id="view_sponsored_child_property_form" model="ir.ui.view">
             <field name="name">res.partner.property.form.inherit</field>
-            <field name="model">res.partner</field>
+            <field name="model">sponsored_child</field>
             <field name="priority">3</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
@@ -19,7 +19,7 @@
                         <group col="4">
                             <field name="school" />
                             <field name="school_class" />
-                            <field name="sponsor_id" />
+<!--                            <field name="sponsor_id" /> -->
                         </group>
                         <group col="2">
                             <field name="text_info_eng" />
@@ -35,5 +35,47 @@
                 </page>
             </field>
             </record>
-        </data>
+
+
+        <record id="view_sponsor_property_form" model="ir.ui.view">
+            <field name="name">res.partner.property.form.inherit</field>
+            <field name="model">sponsor</field>
+            <field name="priority">3</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <page name="sales_purchases" position="after">
+<!--                <page string="Accounting" col="4" name="accounting" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}" groups="account.group_account_invoice">
+ -->
+                    <page string="Sponsorship" col="4" name="sponsorship">
+                        <group col="4">
+                            <field name="sponsored_children" />
+                        </group>
+                    </page>
+                </page>
+            </field>
+            </record>
+
+
+        <record id="list_sponsorship" model="ir.ui.view">
+            <field name="name">sponsorship_list_view</field>
+            <field name="model">sponsorship</field>
+            <field name="arch" type="xml">
+                <tree string="Sponsorships">
+                    <field name="start_date" />
+                    <field name="end_date" />
+                    <field name="sponsored_child" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_children" model="ir.actions.act_window">
+            <field name="name">Sponsors</field>
+            <field name="res_model">sponsor</field>
+        </record>
+
+        <menuitem sequence="4" id="menu_sponsor" name="Sponsorship" />
+        <menuitem id="menu_sponsorship_content" parent="menu_sponsor" name="Sponsor" />
+        <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Sponsored Children" action="action_children" />
+
+    </data>
     </openerp>
