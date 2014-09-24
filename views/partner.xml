@@ -36,22 +36,68 @@
             </field>
             </record>
 
+        <!-- The wizaard view -->
+
+        <record id="view_add_sponsorship" model="ir.ui.view">
+            <field name="name">view_add_sponsorship.form</field>
+            <field name="model">add_sponsorship</field>
+            <field name="arch" type="xml">
+                <form string="Add sponsorships">
+                    <separator string="And add sponsorships"/>
+                    <label string="This is where you add sponsorships"/>
+                    <newline/>
+                    <group col="4">
+                        <field name="children_to_add" />
+                        <!--
+                        <field name="fy_id" domain = "[('state','=','draft')]"/>
+                        <field name="fy2_id" domain = "[('state','=','draft')]"/>
+                        <field name="journal_id"/>
+                        <field name="period_id" domain ="[('fiscalyear_id','=',fy2_id),('special','=', True)]" />
+                        <field name="report_name"/>   -->
+                    </group>
+                    <footer>
+                        <button string="Create" name="data_save" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- the wizard action -->
+        <record id="action_add_sponsorship" model="ir.actions.act_window">
+            <field name="name">Add sponsorships</field>
+            <field name="res_model">add_sponsorship</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_add_sponsorship"/>
+            <field name="target">new</field>
+
+        </record>
+
+
 
         <record id="view_sponsor_property_form" model="ir.ui.view">
             <field name="name">res.partner.property.form.inherit</field>
             <field name="model">sponsor</field>
             <field name="priority">3</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+            <!-- <field name="inherit_id" ref="base.view_partner_form"/> -->
             <field name="arch" type="xml">
-                <page name="sales_purchases" position="after">
+                <form>
+                    <div class="oe_button_box, oe_right">
+                        <button string="Add sponsorships" name="%(action_add_sponsorship)s" type="action" />
+                    </div>
+<!--                 <page name="sales_purchases" position="after"> -->
 <!--                <page string="Accounting" col="4" name="accounting" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}" groups="account.group_account_invoice">
  -->
-                    <page string="Sponsorship" col="4" name="sponsorship">
+                    <field name="name" />
+<!--                    <page string="Sponsorship" col="4" name="sponsorship"> -->
                         <group col="4">
                             <field name="sponsored_children" />
                         </group>
-                    </page>
-                </page>
+<!--                    </page> -->
+<!--                </page> -->
+                </form>
             </field>
             </record>
 
@@ -68,14 +114,21 @@
             </field>
         </record>
 
-        <record id="action_children" model="ir.actions.act_window">
+        <record id="action_sponsors" model="ir.actions.act_window">
             <field name="name">Sponsors</field>
             <field name="res_model">sponsor</field>
         </record>
 
+        <record id="action_children" model="ir.actions.act_window">
+            <field name="name">Children</field>
+            <field name="res_model">sponsored_child</field>
+        </record>
+
+
         <menuitem sequence="4" id="menu_sponsor" name="Sponsorship" />
         <menuitem id="menu_sponsorship_content" parent="menu_sponsor" name="Sponsor" />
-        <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Sponsored Children" action="action_children" />
+        <menuitem id="menu_sponsorship_sponsors" parent="menu_sponsorship_content" name="Sponsors" action="action_children" />
+        <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Sponsored Children" action="action_sponsors" />
 
     </data>
     </openerp>

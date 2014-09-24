@@ -9,11 +9,29 @@
     name: 'Bamba'
     gender: 'female'
 -
+  !record {model: sponsored_child, id: child3}:
+    name: 'Samba'
+    gender: 'male'
+-
+  !record {model: sponsored_child, id: child4}:
+    name: 'Bamba'
+    gender: 'female'
+-
+
+-
   The child needs a sponsor initially
 -
   !assert {model: sponsored_child, id: child1, string: 'Child has no sponsor assigned'}:
     - needs_sponsor == True
 -
+  Verify the wizard
+-
+  !python {model: add_sponsorship}: |
+    self = self.browse(cr, uid, [self.create(cr, uid, {})])
+    assert len(self.children_to_add) == 2
+-
+-
+
   !record {model: sponsor, id: sponsor1}:
     name: 'Cathrine Løland'
     sponsored_children:
@@ -23,8 +41,80 @@
       - start_date: '2014-01-02'
         sponsored_child: child2
 -
+  Assign a sponsor
+-
+  !record {model: sponsorship, id: sponsorship1}:
+    sponsored_child: child1
+    sponsor_id: sponsor1
+-
+  Create a new sponsor
+-
+  !record {model: sponsor, id: sponsor2}:
+    name: 'Andre Grant'
+-
+    !python {model: sponsor, id: sponsor2}: |
+      context['active_ids'] = [self.id,]
+-
   http://www.zbeanztech.com/blog/how-effective-yaml-testing-openerp
 -
-  !assert {model: sponsored_child, id: child1}:
+-
+  Refresh the child
+-
+  !python {model: sponsored_child}: |
+    self = self.browse(cr, uid, [ref('child1')])
+    child1 = self
+    print "CHILD1", child1.needs_sponsor
+-
+  Check that we are satisified
+-
+  !assert {model: sponsored_child, id: child1, string: 'Child should have a sponsor now'}:
     - needs_sponsor == False
 -
+-
+  Try the wizard
+-
+  !python {model: add_sponsorship}: |
+    self = self.browse(cr, uid, [self.create(cr, uid, {})])
+    assert len(self.children_to_add) == 4
+-
+  !assert {model: sponsored_child, id: child3, string: 'Child has no sponsor assigned'}:
+    - needs_sponsor == True
+
+-
+    !python {model: add_sponsorship}: |
+      self = self.browse(cr, uid, [self.create(cr, uid, {}),]) # verkar ikkje
+      #child1 = self.browse(cr, uid, ref('child1'))
+      self.children_to_add[2].add_me = True
+      self.children_to_add[3].add_me = True
+      #self.children_to_add = [ref('child3'), ref('child4')]
+      #self['children_to_add'] = [
+      #    (4, ref('child1')),
+      #    (4, ref('child2')) ]
+      #id = self.write(cr, uid, self, {'children_to_add' : [
+      #    (0,0, {'name' : 'child1'}),
+      #    (0,0, {'name' : 'child2'}) ] } )
+      self.data_save( context)
+      assert len(self.children_to_add) == 2
+      #sponsor2 = self.browse(cr, uid, ref('sponsor2'))
+-
+  So we check it
+-
+  !assert {model: sponsor, id: sponsor2, string: Should have sponsorships}:
+    - len(sponsored_children) == 2
+-
+    Then verify that the children does not need a sponsor
+-
+  !assert {model: sponsored_child, id: child3, string: 'Child has a sponsor assigned'}:
+    - needs_sponsor == False
+
+#  !assert {model: sponsor, id: sponsor1, string: Fiscal Year is in Done state}:
+#      - needs_sponsor == False
+-
+-
+  #!record {model: account.change.currency, id: account_change_currency_0}:
+ #   currency_id: base.USD
+-
+#  !workflow {model: sponsor, action: action_add_sponsorship, ref: sponsor1}
+-
+
+

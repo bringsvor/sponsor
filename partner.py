@@ -18,11 +18,13 @@ class SponsoredChild(models.Model):
     _inherit = ['res.partner']
 
     def _calc_needs_sponsor(self):
+        print "DO WE NEED A SPONSOR?", self.id
         if not self.id:
-            self.needs_sponsor = None
+            print "WELL; WE ARE BRAND NEW SO..."
+            self.needs_sponsor = True
             return
         res = self.env['sponsorship'].search([('sponsored_child.id', '=', self.id)])
-        print "RES", res
+        print "RES", res, len(res) == 0
         self.needs_sponsor = len(res) == 0
 
     gender = fields.Selection(string = 'Gender', selection=[('male', 'Male'), ('female', 'Female')])
