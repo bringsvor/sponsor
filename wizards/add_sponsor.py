@@ -6,6 +6,12 @@ from openerp import models, fields, api
 https://www.odoo.com/forum/help-1/question/getting-an-access-error-on-act-window-62950
 """
 
+SELECTION
+https://www.odoo.com/forum/help-1/question/explanation-about-widget-selection-11901
+
+
+
+
 class SponsoredChildSelect(models.TransientModel):
     _name = 'sponsored_child_select'
     _description = 'Wizard to add a sponsor'
