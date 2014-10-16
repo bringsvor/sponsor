@@ -36,22 +36,87 @@
             </field>
             </record>
 
+        <!-- wizard -->
+
+       <record id="view_sponsorship_wizard" model="ir.ui.view">
+            <field name="name">sponsorship.form</field>
+            <field name="model">add_sponsorship_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sponsorships">
+                    <group>
+                        <label for="sponsor"/>
+                        <div>
+                            <!-- <field name="sponsor_id" /> -->
+                            <label for="child_id" />
+                            <field name="child_id"/>
+                            <label for="start_date" />
+                            <field name="start_date" />
+                            <label for="end_date" />
+                            <field name="end_date" />
+<!--                            <field name="sponsor" on_change="onchange_fiscalyear(fiscalyear)" class="oe_inline"/> -->
+<!--                            <label align="0.7" string="(If you do not select a specific fiscal year, all open fiscal years will be selected.)" class="oe_inline"/> -->
+                        </div>
+                    </group>
+                    <footer>
+                        <button string="Create" name="data_save" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- action_add_sponsorship -->
+        <record id="action_add_sponsorship" model="ir.actions.act_window">
+            <field name="name">Sponsorship</field>
+            <field name="res_model">add_sponsorship_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sponsorship_wizard"/>
+            <field name="target">new</field>
+        </record>
+
 
         <record id="view_sponsor_property_form" model="ir.ui.view">
-            <field name="name">res.partner.property.form.inherit</field>
+            <!-- <field name="name">res.partner.property.form.inherit</field> -->
+            <field name="name">Sponsor formt</field>
             <field name="model">sponsor</field>
             <field name="priority">3</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+            <!-- <field name="inherit_id" ref="base.view_partner_form" /> -->
             <field name="arch" type="xml">
-                <page name="sales_purchases" position="after">
+		<form>
+                <!-- <button name="action_add_sponsorship" type="object" string="Add sponsorship" attrs="{'invisible':['|',('sent','=',True), ('state', '!=', 'open')]}" class="oe_highlight" groups="base.group_user"/> -->
+            <!-- button can be type="object" -->
+                <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" />
 <!--                <page string="Accounting" col="4" name="accounting" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}" groups="account.group_account_invoice">
  -->
-                    <page string="Sponsorship" col="4" name="sponsorship">
-                        <group col="4">
-                            <field name="sponsored_children" />
-                        </group>
-                    </page>
-                </page>
+            <sheet>
+
+            <field name="image" widget='image' class="oe_left oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                <div class="oe_title oe_left">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" />
+                        </h1>
+                </div>
+                <div class="oe_right oe_button_box" name="buttons"> </div>
+                <group>
+                                            <label for="street" string="Address"/>
+                            <div>
+                                <field name="street" placeholder="Street..."   />
+                                <field name="street2"  />
+                                <div class="address_format">
+                                    <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
+                                    <field name="city" placeholder="City" style="width: 40%%" />
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)" />
+                                    <field name="zip" placeholder="ZIP" style="width: 20%%" />
+                                </div>
+                                <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
+                            </div>
+                    </group>
+
+                            <field name="sponsored_children" readonly="True" />
+            </sheet>
+</form>
             </field>
             </record>
 

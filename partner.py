@@ -17,13 +17,25 @@ class SponsoredChild(models.Model):
     _name = 'sponsored_child'
     _inherit = ['res.partner']
 
-    def _calc_needs_sponsor(self):
+    def _get_sponsor_name(self):
         if not self.id:
-            self.needs_sponsor = None
+            self.sponsor_name = ''
             return
-        res = self.env['sponsorship'].search([('sponsored_child.id', '=', self.id)])
-        print "RES", res
-        self.needs_sponsor = len(res) == 0
+
+        sponsorship = self.env['sponsorship'].search([('sponsored_child.id', '=', self.id)])
+        if len(sponsorship) == 0:
+            self.sponsor_name = ''
+            return
+
+        assert len(sponsorship) == 1
+        self.sponsor_name = sponsorship.sponsor_id.name
+        print "RETRIEVED SPONSOR NME", self.sponsor_name
+        s2 = self.sponsors[0].sponsor_id.name
+        assert s2 == self.sponsor_name
+        print "RETRIEVED SPONSORS", self.sponsors
+
+    def _calc_needs_sponsor(self):
+        self.needs_sponsor = len(self.sponsors) == 0
 
     gender = fields.Selection(string = 'Gender', selection=[('male', 'Male'), ('female', 'Female')])
     school = fields.Char(string = "School", help='Which school')
@@ -34,8 +46,11 @@ class SponsoredChild(models.Model):
     text_info_nor = fields.Text(string = 'Description (Norwegian)')
     village_info = fields.Text(string = 'Info about the village')
     needs_sponsor = fields.Boolean(string = 'Needs sponsor', compute=_calc_needs_sponsor)
+    sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
     parent_1 = fields.Char(string = 'Parent 1')
     parent_2 = fields.Char(string = 'Parent 2')
+
+    sponsors = fields.One2many('sponsorship', 'sponsored_child')
 
     def write(self, cr, uid, id, vals, context=None, check=True, update_check=True):
         body = ''
@@ -59,20 +74,22 @@ class SponsoredChild(models.Model):
 
 class Sponsorship(models.Model):
     _name = 'sponsorship'
+    _order = 'end_date desc, start_date desc'
 
     def _sponsored_children(self):
         return 'GEI?'
 
     start_date = fields.Date(string = 'Start of sponsorship')
     end_date = fields.Date(string = 'End of sponsorship')
-    sponsor_id = fields.Many2one('sponsor', string='Sponsor',
-        ondelete='cascade', index=True)
+    #sponsor_id = fields.Many2one('sponsor_id', string='Sponsor',
+    #    ondelete='cascade', index=True)
 
+    sponsor_id = fields.Many2one('sponsor', string = 'Sponsor')
     sponsored_child = fields.Many2one('sponsored_child', string = 'Sponsored Children')
 
 class Sponsor(models.Model):
     _name = 'sponsor'
     _inherit = ['res.partner']
 
-    #sponsor_id = fields.Many2one('res.partner', string="Sponsor")
+    sponsor_id = fields.One2many('sponsorship', 'sponsor_id', string="Sponsor")
     sponsored_children = fields.One2many('sponsorship', 'sponsor_id', string='Sponsored Children')
