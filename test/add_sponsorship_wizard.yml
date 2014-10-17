@@ -1,6 +1,7 @@
 -
-  !record {model: sponsor, id: sponsor3}:
+  !record {model: res.partner, id: sponsor3}:
     name: 'Doffen Duck'
+    sponsor: True
 -
 
 -
@@ -26,10 +27,10 @@
 -
   Check that it was added
 -
-  !assert {model: sponsored_child, id: child2, string = 'Child must have three sponsors'}:
+  !assert {model: res.partner, id: child2, string = 'Child must have three sponsors'}:
   - len(sponsors) == 3
 -
   Check the order again
 -
-  !assert {model: sponsored_child, id: child2, string = 'The first added should come first'}:
+  !assert {model: res.partner, id: child2, string = 'The first added should come first'}:
   - sponsors[0].sponsor_id.name == 'Doffen Duck'

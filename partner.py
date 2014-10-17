@@ -14,13 +14,13 @@ class sponsor_mapping(models.Model):
     child = fields.Many2one('res.partner', string='Child')
 """
 class SponsoredChild(models.Model):
-    _name = 'sponsored_child'
-    _inherit = ['res.partner']
+    _inherit = 'res.partner'
 
-
+    @api.one
     def _calc_needs_sponsor(self):
         self.needs_sponsor = len(self.sponsors) == 0
 
+    sponsored_child = fields.Boolean(string = 'Sponsored Child')
     gender = fields.Selection(string = 'Gender', selection=[('male', 'Male'), ('female', 'Female')])
     school = fields.Char(string = "School", help='Which school')
     date_of_birth = fields.Date(string = 'Date of birth')
@@ -69,12 +69,12 @@ class Sponsorship(models.Model):
     #sponsor_id = fields.Many2one('sponsor_id', string='Sponsor',
     #    ondelete='cascade', index=True)
 
-    sponsor_id = fields.Many2one('sponsor', string = 'Sponsor')
-    sponsored_child = fields.Many2one('sponsored_child', string = 'Sponsored Children')
+    sponsor_id = fields.Many2one('res.partner', string = 'Sponsor')
+    sponsored_child = fields.Many2one('res.partner', string = 'Child', domain=[('sponsored_child', '=', 'True')])
 
 class Sponsor(models.Model):
-    _name = 'sponsor'
-    _inherit = ['res.partner']
+    #_name = 'sponsor'
+    _inherit = 'res.partner'
 
     def _has_mailing_address(self):
         #self.mailing_address = len(self.child_ids)>0
@@ -109,12 +109,14 @@ class Sponsor(models.Model):
     #sponsor_id = fields.One2many('sponsorship', 'sponsor_id', string="Sponsor")
     sponsored_children = fields.One2many('sponsorship', 'sponsor_id', string='Sponsored Children')
     sponsor_info = fields.Html(string = 'Information')
-    mailing_address = fields.Boolean(compute = _has_mailing_address, hidden = True)
-    mailing_street  = fields.Char('Mailing Street', compute = _get_mailing_country, inverse= _set_mailing_street)
-    mailing_street2  = fields.Char('Mailing Street2', compute = _get_mailing_country, inverse= _set_mailing_street)
-    mailing_city  = fields.Char('Mailing City', compute = _get_mailing_country, inverse= _set_mailing_street)
-    mailing_state_id  = fields.Char('Mailing State', compute = _get_mailing_country, inverse= _set_mailing_street)
-    mailing_zip = fields.Char('Mailing Zip', compute = _get_mailing_country, inverse= _set_mailing_street)
-    mailing_country_id = fields.Integer('Mailing country', compute = _get_mailing_country, inverse= _set_mailing_street)
+    sponsor = fields.Boolean(string = 'Sponsor')
+    mailing_name = fields.Char('Mailing name')
+    mailing_address = fields.Boolean(string = 'Separate mailing address')
+    mailing_street  = fields.Char('Mailing Street')
+    mailing_street2  = fields.Char('Mailing Street2')
+    mailing_city  = fields.Char('Mailing City')
+    mailing_state_id  = fields.Many2one('res.country.state', ondelete='restrict')
+    mailing_zip = fields.Char('Mailing Zip', size=24, change_default=True)
+    mailing_country_id = fields.Many2one('res.country', 'Mailing country', ondelete='restrict')
 
     # TODO Clean this up

@@ -8,7 +8,7 @@ class add_sponsorship_wizard(models.TransientModel):
 
     def _get_all_children(self):
         c = []
-        children =  self.env['sponsored_child'].search([])
+        children =  self.env['res.partner'].search([('sponsored_child', '=', 'True')])
         for n in children:
             c.append( (n.id, n.name))
         return c
@@ -29,8 +29,9 @@ class add_sponsorship_wizard(models.TransientModel):
         model = self._context['active_model']
         active_id = self._context['active_id']
 
-        assert model == 'sponsor'
-        sponsor = self.env['sponsor'].browse(active_id)
+        assert model == 'res.partner'
+        sponsor = self.env['res.partner'].browse(active_id)
+        assert sponsor.sponsor
         print "DATA_SAVE 2", sponsor
         print "DATA_SAVE 3", self.child_id
         sponsorship = {'sponsor_id' : active_id,

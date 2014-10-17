@@ -1,20 +1,22 @@
 -
   Gjedna
 -
-  !record {model: sponsored_child, id: child1}:
+  !record {model: res.partner, id: child1}:
     name: 'Samba'
     gender: 'male'
+    sponsored_child: True
 -
-  !record {model: sponsored_child, id: child2}:
+  !record {model: res.partner, id: child2}:
     name: 'Bamba'
     gender: 'female'
+    sponsored_child: True
 -
   The child needs a sponsor initially
 -
-  !assert {model: sponsored_child, id: child1, string: 'Child has no sponsor assigned'}:
+  !assert {model: res.partner, id: child1, string: 'Child has no sponsor assigned'}:
     - needs_sponsor == True
 -
-  !record {model: sponsor, id: sponsor1}:
+  !record {model: res.partner, id: sponsor1}:
     name: 'Donald Duck'
     sponsored_children:
       - start_date: '2014-01-01'
@@ -25,18 +27,12 @@
 -
   http://www.zbeanztech.com/blog/how-effective-yaml-testing-openerp
 -
-  !assert {model: sponsored_child, id: child1}:
+  !assert {model: res.partner, id: child1}:
     - needs_sponsor == False
--
-  Check we are assigned
--
-  !assert {model: sponsored_child, id: child1, string: 'Unable to retrieve sponsor name'}:
-    #sponsor_name = self.read(cr, uid, [ref('child1')], ['sponsor_name'])
-    - sponsor_name == 'Donald Duck'
 -
   Check the sponsor history
 -
-  !record {model: sponsor, id: sponsor2}:
+  !record {model: res.partner, id: sponsor2}:
     name: 'Dollie Duck'
     sponsored_children:
       - start_date: '2014-02-02'
@@ -44,12 +40,12 @@
 -
       Now the child should have two sponsors
 -
-  !assert {model: sponsored_child, id: child2, string = 'Child must have two sponsors'}:
+  !assert {model: res.partner, id: child2, string = 'Child must have two sponsors'}:
   - len(sponsors) == 2
 -
   Test the order
 -
-  !python {model: sponsored_child, string = 'Sponsors must appear in order'}: |
+  !python {model: res.partner, string = 'Sponsors must appear in order'}: |
     child = self.browse(cr, uid, [ref('child2')])
     sponsor_names = [ x.sponsor_id.name for x in child.sponsors ]
     print "NAMES", sponsor_names
