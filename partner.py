@@ -17,22 +17,6 @@ class SponsoredChild(models.Model):
     _name = 'sponsored_child'
     _inherit = ['res.partner']
 
-    def _get_sponsor_name(self):
-        if not self.id:
-            self.sponsor_name = ''
-            return
-
-        sponsorship = self.env['sponsorship'].search([('sponsored_child.id', '=', self.id)])
-        if len(sponsorship) == 0:
-            self.sponsor_name = ''
-            return
-
-        assert len(sponsorship) == 1
-        self.sponsor_name = sponsorship.sponsor_id.name
-        print "RETRIEVED SPONSOR NME", self.sponsor_name
-        s2 = self.sponsors[0].sponsor_id.name
-        assert s2 == self.sponsor_name
-        print "RETRIEVED SPONSORS", self.sponsors
 
     def _calc_needs_sponsor(self):
         self.needs_sponsor = len(self.sponsors) == 0
@@ -46,7 +30,8 @@ class SponsoredChild(models.Model):
     text_info_nor = fields.Text(string = 'Description (Norwegian)')
     village_info = fields.Text(string = 'Info about the village')
     needs_sponsor = fields.Boolean(string = 'Needs sponsor', compute=_calc_needs_sponsor)
-    sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
+    #sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
+    sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
     parent_1 = fields.Char(string = 'Parent 1')
     parent_2 = fields.Char(string = 'Parent 2')
 
@@ -91,5 +76,45 @@ class Sponsor(models.Model):
     _name = 'sponsor'
     _inherit = ['res.partner']
 
-    sponsor_id = fields.One2many('sponsorship', 'sponsor_id', string="Sponsor")
+    def _has_mailing_address(self):
+        #self.mailing_address = len(self.child_ids)>0
+        self.mailing_address = True # show it
+
+    @api.one
+    def _get_mailing_country(self):
+        if len(self.child_ids) == 0:
+            mailing = None
+        else:
+            mailing = self.child_ids[0]
+        self.mailing_street = mailing and mailing.street or ''
+        self.mailing_street2 = mailing and mailing.street2 or ''
+        self.mailing_city = mailing and mailing.city or ''
+        self.mailing_state_id = mailing and mailing.state_id or ''
+        self.mailing_zip = mailing and mailing.zip or ''
+        self.mailing_country_id = mailing and mailing.country_id or ''
+
+    @api.one
+    def _set_mailing_street(self):
+        if len(self.child_ids) == 0:
+            print "MAKE A CHILD"
+            o = self.env['res.partner']
+            print "O", o
+            #child = o.create({'name' : 'hei'})
+            #print "CHILD ID", child
+            #self.child_ids.append(child)
+
+        for field in ('mailing_street', 'mailing_street2', 'mailing_city', 'mailing_state_id', 'mailing_zip', 'mailing_country_id'):
+            print "VERDI", field, self[field]
+
+    #sponsor_id = fields.One2many('sponsorship', 'sponsor_id', string="Sponsor")
     sponsored_children = fields.One2many('sponsorship', 'sponsor_id', string='Sponsored Children')
+    sponsor_info = fields.Html(string = 'Information')
+    mailing_address = fields.Boolean(compute = _has_mailing_address, hidden = True)
+    mailing_street  = fields.Char('Mailing Street', compute = _get_mailing_country, inverse= _set_mailing_street)
+    mailing_street2  = fields.Char('Mailing Street2', compute = _get_mailing_country, inverse= _set_mailing_street)
+    mailing_city  = fields.Char('Mailing City', compute = _get_mailing_country, inverse= _set_mailing_street)
+    mailing_state_id  = fields.Char('Mailing State', compute = _get_mailing_country, inverse= _set_mailing_street)
+    mailing_zip = fields.Char('Mailing Zip', compute = _get_mailing_country, inverse= _set_mailing_street)
+    mailing_country_id = fields.Integer('Mailing country', compute = _get_mailing_country, inverse= _set_mailing_street)
+
+    # TODO Clean this up

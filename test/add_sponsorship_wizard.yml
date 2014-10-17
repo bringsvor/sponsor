@@ -7,20 +7,26 @@
   Check the wizard
 -
   !record {model: add_sponsorship_wizard, id: add_wiz1}:
-    sponsor_id: sponsor3
-    start_date: '2012-01-01'
-    child_id: child2
+    start_date: '2015-01-01'
+    #  child_id: child2.id Changed to be a Selection field.
+-
+  Update the child_id
+-
+  !python {model: add_sponsorship_wizard}: |
+    add_wiz1 = self.browse(cr, uid, [ref('add_wiz1')])
+    add_wiz1.child_id = ref('child2')
+-
 -
     Add the child
 -
     !python {model: add_sponsorship_wizard}: |
       self.data_save(cr, uid, [ref('add_wiz1')], {'lang': 'en_US',
       'search_disable_custom_filters': True, 'tz': False, 'uid': 1, 'active_model': 'sponsor',
-      'active_ids': [ref('sponsor1')], 'active_id': ref('sponsor1')})
+      'active_ids': [ref('sponsor3')], 'active_id': ref('sponsor3')})
 -
   Check that it was added
 -
-  !assert {model: sponsored_child, id: child2, string = 'Child must have two sponsors'}:
+  !assert {model: sponsored_child, id: child2, string = 'Child must have three sponsors'}:
   - len(sponsors) == 3
 -
   Check the order again

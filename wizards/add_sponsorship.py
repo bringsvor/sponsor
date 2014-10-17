@@ -14,7 +14,8 @@ class add_sponsorship_wizard(models.TransientModel):
         return c
 
     #sponsor_id = fields.Many2one('sponsor')
-    ## child_id = fields.Many2one('sponsored_child', default=_get_first_child)
+    # see partner.py...........
+    ## child_id = fields.Many2one('sponsored_child',  domain=[('active','=',True)])
     child_id = fields.Selection( _get_all_children )
     start_date = fields.Date('Start date')
     end_date = fields.Date('End date')

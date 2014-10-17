@@ -54,3 +54,6 @@
     sponsor_names = [ x.sponsor_id.name for x in child.sponsors ]
     print "NAMES", sponsor_names
     assert sponsor_names == ['Dollie Duck','Donald Duck']
+-
+  And from the child side
+-

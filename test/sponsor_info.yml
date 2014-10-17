@@ -1,0 +1,29 @@
+-
+  Navn
+  Fakturaadresse
+  Fadderbevisadresse
+  Telefonnummer
+  Relasjon til barnet
+  Annen informasjon om fadder, som kan være fritekst
+-
+  !record {model: sponsor, id: sponsor4}:
+    name: 'Andre Grant'
+-
+    Then populate a bit
+-
+  !python {model: sponsor}: |
+    partnerobj = self.pool.get('res.partner')
+    sponsor4 = self.browse(cr, uid, [ref('sponsor4')])
+    print "OK1", partnerobj
+    invoice_address1 = partnerobj.create(cr, uid,
+      {'name' : 'Bestemor Duck'
+         })
+    print "OK2"
+    sponsor_address2 = partnerobj.create(cr, uid,
+      {'name' : 'Ole Duck',
+        'type' : 'Gurba'})
+    print "OK3"
+    sponso4.child_ids = [invoice_address, sponsor_address]
+    sponso4.phone = '+47 700 29041'
+    sponsor_info = 'This is a very rich guy. He should sponsor more.'
+-
