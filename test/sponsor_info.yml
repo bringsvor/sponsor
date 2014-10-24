@@ -25,7 +25,7 @@
       {'name' : 'Ole Duck',
         'type' : 'default'})
     print "OK3"
-    sponsor4.child_ids = [(1, invoice_address), (1, sponsor_address)]
+    #sponsor4.child_ids = [(1, invoice_address), (1, sponsor_address)]
     sponsor4.phone = '+47 700 29041'
     sponsor_info = 'This is a very rich guy. He should sponsor more.'
 -

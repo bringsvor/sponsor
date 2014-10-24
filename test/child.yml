@@ -1,0 +1,23 @@
+-
+  First create two villages
+-
+  !record {model: village, id: village1}:
+    name: 'Village1'
+    district_name: 'District1'
+    description: 'A small village'
+-
+  Then we create a school
+-
+  !record {model: school, id: school1}:
+    name: 'A small school'
+    village: village1
+-
+    Then we are good to go
+-
+  !record {model: res.partner, id: child1}:
+    name: 'Samba'
+    gender: 'male'
+    sponsored_child: True
+    village: village1
+    school: school1
+-

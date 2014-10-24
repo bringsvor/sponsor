@@ -17,6 +17,7 @@ class add_sponsorship_wizard(models.TransientModel):
     # see partner.py...........
     ## child_id = fields.Many2one('sponsored_child',  domain=[('active','=',True)])
     child_id = fields.Selection( _get_all_children )
+    sub_sponsor = fields.Many2one('res.partner', 'SUb Sponsor', domain=[('sub_sponsor','=',True)])
     start_date = fields.Date('Start date')
     end_date = fields.Date('End date')
 
@@ -37,7 +38,8 @@ class add_sponsorship_wizard(models.TransientModel):
         sponsorship = {'sponsor_id' : active_id,
                                          'sponsored_child' : int(self.child_id),
                                          'start_date' : self.start_date,
-                                         'end_date' : self.end_date}
+                                         'end_date' : self.end_date,
+                                         'sub_sponsor' : self.sub_sponsor}
         print "CREATING SPONSORSHP"
         self.env['sponsorship'].create( sponsorship)
         return {'type': 'ir.actions.act_window_close'}

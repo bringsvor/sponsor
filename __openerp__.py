@@ -33,12 +33,14 @@ Module to handle sponsored children. Human Aid.
     'depends': ['account'],
     'data': [
         'views/partner.xml',
+        'views/wizard_view.xml',
     ],
     'demo': [],
     'test': [
         'test/sponsor_mapping.yml',
         'test/add_sponsorship_wizard.yml',
-        'test/sponsor_info.yml'
+        'test/sponsor_info.yml',
+        'test/child.yml',
     ],
     'installable': True,
     'auto_install': False,

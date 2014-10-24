@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="add_sponsorship_wizard_view" model="ir.ui.view">
+            <field name="name">Add Sponsored Child</field>
+            <field name="model">add_sponsorship_wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group colspan="2">
+                            <field name="child_id" />
+                            <field name="sub_sponsor" />
+                            <field name="start_date" />
+                            <field name="end_date" />
+                    </group>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

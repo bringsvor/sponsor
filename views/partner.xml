@@ -31,7 +31,7 @@
                         <group col="2">
                             <field name="text_info_eng" />
                             <field name="text_info_nor" />
-                            <field name="village_info" />
+                            <field name="village" />
                             <field name="needs_sponsor" readonly="1"/>
                         </group>
                         <group col="2" string="Parents">
@@ -51,19 +51,14 @@
             <field name="model">add_sponsorship_wizard</field>
             <field name="arch" type="xml">
                 <form string="Sponsorships">
-                    <group>
-                        <label for="sponsor"/>
-                        <div>
+                    <group colspan="2">
                             <!-- <field name="sponsor_id" /> -->
-                            <label for="child_id" />
                             <field name="child_id"/>
-                            <label for="start_date" />
                             <field name="start_date" />
-                            <label for="end_date" />
                             <field name="end_date" />
+                            <field name="sub_sponsor" />
 <!--                            <field name="sponsor" on_change="onchange_fiscalyear(fiscalyear)" class="oe_inline"/> -->
 <!--                            <label align="0.7" string="(If you do not select a specific fiscal year, all open fiscal years will be selected.)" class="oe_inline"/> -->
-                        </div>
                     </group>
                     <footer>
                         <button string="Create" name="data_save" type="object" class="oe_highlight"/>
@@ -125,7 +120,7 @@
                             <field name="school_class" />
                             <field name="text_info_eng" />
                             <field name="text_info_nor" />
-                            <field name="village_info" />
+                            <field name="village" />
                             <field name="needs_sponsor" readonly="1"/>
                             <group col="2" string="Parents">
                                 <field name="parent_1" />
@@ -139,6 +134,18 @@
                 </notebook>
             </field>
         </record>
+
+        <record model="ir.ui.view" id="view_child_form">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="village" placeholder="Village...." />
+                </field>
+            </field>
+        </record>
+
 
         <record id="Xview_sponsor_property_form" model="ir.ui.view">
             <!-- <field name="name">res.partner.property.form.inherit</field> -->
@@ -242,6 +249,7 @@
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
                 <tree string="Sponsorships">
+                    <field name="sub_sponsor_id" />
                     <field name="start_date" />
                     <field name="end_date" />
                     <field name="sponsored_child" />
@@ -258,6 +266,7 @@
                 <tree string="Sponsorships">
                     <field name="start_date" />
                     <field name="end_date" />
+                    <field name="sub_sponsor_id" />
                     <field name="sponsor_id" />
                 </tree>
             </field>
@@ -271,6 +280,7 @@
                 <form string="Sponsorships">
                     <field name="start_date" />
                     <field name="end_date" />
+                    <field name="sub_sponsor_id" />
                     <field name="sponsor_id" />
                 </form>
             </field>
@@ -289,11 +299,14 @@
                     <filter string="Sponsors" name="sponsor" icon="terp-personal" domain="[('sponsor','=',1)]" help="Sponsor Partners"/>
                     <separator/>
                     <filter string="Sponsored Children" name="sponsored_child" icon="terp-personal" domain="[('sponsored_child','=',1)]" help="Sponsored Chilren Partners"/>
+                    <filter string="Children needing sponsor" name="sponsored_child_needs" icon="terp-personal" domain="[('sponsored_child','=',1), ('needs_sponsor', '=', 1)]" help="Sponsored Chilren Needing Sponsors"/>
                     <separator/>
+
 <!--                    <filter icon="terp-personal" name="all_non_members" domain="[('membership_state', 'in', ['none','canceled','old','waiting'])]" string="All non Members" help="None/Canceled/Old/Waiting"/>
                     <filter icon="terp-personal" name="all_members" domain="[('membership_state', 'in', ['invoiced','paid','free'])]" string="All Members" help="Invoiced/Paid/Free"/> -->
                     <group expand="0" string="Group By" colspan="10" col="8">
-                        <filter string="Village" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'city'}"/>
+                        <filter string="Village" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'village'}"/>
+                        <filter string="School" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'school'}"/>
 <!--                        <filter string="Salesperson" icon="terp-personal" domain="[]" context="{'group_by' : 'user_id'}"/>
                         <filter string="Associate Member" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'associate_member'}"/>
                         <filter string=" Membership State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'membership_state'}"/>
@@ -340,6 +353,20 @@
             <field name="context">{"search_default_sponsored_child": 1, "default_sponsored_child": True}</field>
         </record>
 
+
+        <record model="ir.actions.act_window.view" id="action_children_view_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="sponsors_tree"/>
+            <field name="act_window_id" ref="action_children"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_children_view_form">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_child_form"/>
+            <field name="act_window_id" ref="action_children"/>
+        </record>
 
         <menuitem sequence="4" id="menu_sponsor" name="Sponsorship" />
         <menuitem id="menu_sponsorship_content" parent="menu_sponsor" name="Sponsor" />

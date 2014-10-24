@@ -22,7 +22,7 @@
 -
     !python {model: add_sponsorship_wizard}: |
       self.data_save(cr, uid, [ref('add_wiz1')], {'lang': 'en_US',
-      'search_disable_custom_filters': True, 'tz': False, 'uid': 1, 'active_model': 'sponsor',
+      'search_disable_custom_filters': True, 'tz': False, 'uid': 1, 'active_model': 'res.partner',
       'active_ids': [ref('sponsor3')], 'active_id': ref('sponsor3')})
 -
   Check that it was added
