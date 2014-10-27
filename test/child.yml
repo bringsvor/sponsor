@@ -21,3 +21,28 @@
     village: village1
     school: school1
 -
+  Some tests on age
+-
+  !record {model: res.partner, id: child20}:
+    name: 'Babar'
+    birthyear: 2000
+-
+  Check that we use this.
+-
+  !python {model: res.partner, id: child20}: |
+    import datetime
+    child = self.browse([ref('child20')])
+    yearsago = datetime.date.today().year - 2000
+    assert self.probable_age == yearsago
+-
+  And now the DOB
+-
+  !record {model: res.partner, id: child20}:
+    date_of_birth: 2009-12-24
+-
+  !python {model: res.partner, id: child20}: |
+    import datetime
+    child = self.browse([ref('child20')])
+    yearsago = datetime.date.today().year - 2009
+    assert self.probable_age == yearsago
+-

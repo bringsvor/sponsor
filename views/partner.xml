@@ -116,6 +116,7 @@
                     <group colspan="2" attrs="{'invisible':[('sponsored_child','!=',True)]}">
                         <field name="gender" widget="selection" />
                             <field name="date_of_birth" />
+                            <field name="birthyear" />
                             <field name="school" />
                             <field name="school_class" />
                             <field name="text_info_eng" />
@@ -129,7 +130,7 @@
                         <field name="sponsors" colspan="4" nolabel="1"
                context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
                     </group>
-    <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" attrs="{'invisible':[('sponsor','!=',True)]}" />
+<!--    <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" attrs="{'invisible':[('sponsor','!=',True)]}" /> -->
                     </page>
                 </notebook>
             </field>
@@ -140,6 +141,9 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="parent_id" position="before">
+                    <field name="ref" placeholder="Reference..." />
+                </field>
                 <field name="category_id" position="after">
                     <field name="village" placeholder="Village...." />
                 </field>
@@ -249,10 +253,10 @@
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
                 <tree string="Sponsorships">
-                    <field name="sub_sponsor_id" />
+                    <field name="sponsored_child" />
                     <field name="start_date" />
                     <field name="end_date" />
-                    <field name="sponsored_child" />
+                    <field name="sub_sponsor_id" />
                 </tree>
             </field>
         </record>
@@ -280,8 +284,8 @@
                 <form string="Sponsorships">
                     <field name="start_date" />
                     <field name="end_date" />
-                    <field name="sub_sponsor_id" />
                     <field name="sponsor_id" />
+                    <field name="sub_sponsor_id" />
                 </form>
             </field>
         </record>
@@ -296,6 +300,10 @@
                     <field name="sponsor" invisible="1"/>
                     <field name="sponsored_child" invisible="1"/>
 <!--                    <field name="membership_stop" string="End Membership Date"/> -->
+                    <field name="name"
+                       filter_domain="['|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self)]"/>
+                    <field name="ref" filter_domain="[('ref', 'ilike', self)]" />
+                   <separator/>
                     <filter string="Sponsors" name="sponsor" icon="terp-personal" domain="[('sponsor','=',1)]" help="Sponsor Partners"/>
                     <separator/>
                     <filter string="Sponsored Children" name="sponsored_child" icon="terp-personal" domain="[('sponsored_child','=',1)]" help="Sponsored Chilren Partners"/>
