@@ -51,10 +51,11 @@ class SponsoredChild(models.Model):
     probable_age = fields.Integer(string = 'Probable age', store=True, compute=_calc_age)
     needs_sponsor = fields.Boolean(string = 'Needs sponsor', store=True, compute=_calc_needs_sponsor, default=True)
     #sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
-    sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
+    ####sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
     father = fields.Char(string = 'Father')
     mother = fields.Char(string = 'Mother')
-    child_ident = fields.Char(string = 'Child Code', required=True)
+    sponsors = fields.One2many('sponsorship', 'sponsored_child')
+    child_ident = fields.Char(string = 'Child Code')
 
     state = fields.Selection([
         ('draft','Draft'),
@@ -79,7 +80,17 @@ class SponsoredChild(models.Model):
     def action_inactive(self):
         self.state = 'inactive'
 
-    sponsors = fields.One2many('sponsorship', 'sponsored_child')
+
+    @api.multi
+    def child_print(self):
+        """ Print the invoice and mark it as sent, so that we can see more
+            easily the next step of the workflow
+        """
+        assert len(self) == 1, 'This option should only be used for a single id at a time.'
+        # Create
+        print "SPONSORS", self.sponsors
+        print "PICS", self.image_ids
+        return self.env['report'].get_action(self, 'sponsor.report_sponsorship_view')
 
 
     def write(self, cr, uid, id, vals, context=None, check=True, update_check=True):
@@ -88,7 +99,7 @@ class SponsoredChild(models.Model):
         partner = self.browse(cr, uid, id)
         for attribute, value in vals.items():
             if attribute == 'image':
-                self.store_old_image(cr, uid, id)
+                print "NEW IMAGE"
             current_value = partner[attribute]
             attribute_name = partner.fields_get()[attribute]['string']
             if partner.fields_get()[attribute]['type'] == 'many2one':
@@ -119,3 +130,7 @@ class School(models.Model):
     name = fields.Char(string = 'School')
     village = fields.Many2one('village', 'Village', ondelete='restrict')
 
+class SponsorLetter(models.Model):
+    _name = 'sponsor_letter'
+
+    child_id = fields.Many2one('res.partner', 'Child', ondelete='restrict')

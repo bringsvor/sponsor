@@ -35,6 +35,8 @@ Module to handle sponsored children. Human Aid.
         'views/partner.xml',
         'views/wizard_view.xml',
         'child_workflow.xml',
+        #'views/sponsor_letter.xml',
+        'views/reports.xml',
     ],
     'demo': [],
     'test': [

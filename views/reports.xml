@@ -1,0 +1,123 @@
+<openerp>
+<data>
+    <report
+        id="sponsor_letter"
+        model="res.partner"
+        string="Sponsorship Report"
+        name="sponsor.report_sponsorship_view"
+        file="sponsor.report_sponsorship"
+        report_type="qweb-pdf" />
+
+
+    <template id="external_layout_header">
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-3">
+                <img t-att-src="'/sponsor/static/src/img/upper_east_district.png'"  style="max-height: 90px;"/>
+            </div>
+            <div class="col-xs-9 text-right" style="margin-top:20px;">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 90px;"/>
+            </div>
+        </div>
+        <div class="row zero_min_height">
+            <div class="col-xs-12">
+                <div style="border-bottom: 1px solid black;"></div>
+            </div>
+        </div>
+        <!--
+        <div class="row">
+            <div class="col-xs-3">
+                <div t-field="company.partner_id"
+                    t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+                    style="border-bottom: 1px solid black;"/>
+            </div>
+        </div> -->
+    </div>
+</template>
+
+<template id="report_layout">
+                            <!-- Multicompany -->
+                    <t t-if="o and 'company_id' in o">
+                        <t t-set="company" t-value="o.company_id"></t>
+                    </t>
+                    <t t-if="not o or not 'company_id' in o">
+                        <t t-set="company" t-value="res_company"></t>
+                    </t>
+
+                    <t t-call="sponsor.external_layout_header" />
+                    <t t-raw="0" />
+    <!-- <t t-call="report.external_layout_footer" /> -->
+
+</template>
+
+    <template id="report_sponsorship_view">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sponsor.report_layout">
+                    <div class="page">
+                        <h1>Fadderbevis</h1>
+                        <h2 t-field="doc.name"/>
+                        <div class="col-xs-12">
+                            <div class="row">
+                        <b>IDNR</b> <span t-field="doc.child_ident"/>
+                                </div>
+                            <div class="row">
+                        <b>Barnetds navn</b> <span t-field="doc.name" />
+                                </div>
+                            <div class="row">
+                        <b>Født</b> <span t-field="doc.date_of_birth" />
+                                </div>
+                            <div class="row">
+                        <b>Kjønn</b> <span t-field="doc.gender" />
+                                </div>
+                            <div class="row">
+                        <b>Farens navn</b> <span t-field="doc.father" />
+                                </div>
+                            <div class="row">
+                        <b>Morens navn</b> <span t-field="doc.mother" />
+                                </div>
+                        <!--
+                        <b>Adresse</b>                 <div t-field="doc"
+                    t-field-options='{"widget": "contact", "fields": ["address", "village"], "no_marker": true}'
+                    style="border-bottom: 1px solid black;"/>
+                        -->
+                            <div class="row">
+                        <b>Skole</b> <span t-field="doc.school" />
+                                </div>
+                            <div class="row">
+                        <b>Klasse</b> <span t-field="doc.school_class" />
+                                </div>
+                            <div class="row">
+                        <b>Fadder</b> <span t-field="doc.sponsor" />
+                                </div>
+                            </div>
+
+                        <div class="col-xs-12">
+                            <t t-foreach="doc.image_ids" t-as="img">
+                                <p>
+                                    <img t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="64" class="cal_avatar"/>
+                                </p>
+                            </t>
+                            </div>
+
+
+
+
+
+
+                        <h3>Sponsorships:</h3>
+                        <span t-esc="doc.sponsors" />
+                        <ul>
+                            <t t-foreach="doc.sponsors" t-as="sponsorship">
+                                <li>SPONSOR <span t-field="sponsorship.sponsor_id.name"/></li>
+                            </t>
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</data>
+</openerp>

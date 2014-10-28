@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_invoice_document">
+    <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <h2 t-field="doc.name"/>
+                        <p>From <span t-field="doc.start_date"/> to <span t-field="doc.end_date"/></p>
+                        IMAGE! AN IMAGE!
+                        IMAGES? <span t-field="doc.image_ids" />
+                        <t t-foreach="doc.image_ids" t-as="img">
+                            AN IMAGE
+                            <img t-att-src="'data:image/png;base64,'+img.image_data.raw_value" class="oe_avatar oe_kanban_avatar_smallbox"/>
+                        </t>
+
+                        <h3>Attendees:</h3>
+                        <ul>
+                            <t t-foreach="doc.attendee_ids" t-as="attendee">
+                                <li><span t-field="attendee.name"/></li>
+                            </t>
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    </data>
+    </openerp>
