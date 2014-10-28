@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="wkf" model="workflow">
+            <field name="name">sponsor.child_workflow</field>
+            <field name="osv">res.partner</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record id="act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf"/>
+            <field name="flow_start">True</field>
+            <field name="action">action_draft()</field>
+            <field name="kind">function</field>
+            <field name="name">draft</field>
+        </record>
+
+        <record id="act_open" model="workflow.activity">
+            <field name="wkf_id" ref="wkf"/>
+            <field name="name">open</field>
+            <field name="action">action_validate()</field>
+            <field name="kind">function</field>
+        </record>
+
+        <record id="act_inactive" model="workflow.activity">
+            <field name="wkf_id" ref="wkf"/>
+            <field name="name">inactive</field>
+            <!-- <field name="flow_stop">True</field> -->
+            <field name="action">action_inactive()</field>
+            <field name="kind">function</field>
+        </record>
+
+
+        <record id="t4" model="workflow.transition">
+            <field name="act_from" ref="act_draft"/>
+            <field name="act_to" ref="act_open"/>
+            <field name="signal">child_open</field>
+        </record>
+
+        <record id="t9" model="workflow.transition">
+            <field name="act_from" ref="act_open"/>
+            <field name="act_to" ref="act_inactive"/>
+            <field name="signal">child_inactive</field>
+        </record>
+
+        <record id="t8" model="workflow.transition">
+            <field name="act_from" ref="act_inactive"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">child_draft</field>
+        </record>
+</data>
+</openerp>

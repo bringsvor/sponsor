@@ -30,10 +30,11 @@ Sponsorship
 
 Module to handle sponsored children. Human Aid.
 """,
-    'depends': ['account'],
+    'depends': ['account', 'document_images', 'document_images_on_partner'],
     'data': [
         'views/partner.xml',
         'views/wizard_view.xml',
+        'child_workflow.xml',
     ],
     'demo': [],
     'test': [

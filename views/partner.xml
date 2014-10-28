@@ -2,48 +2,6 @@
 <openerp>
     <data>
 
-        <record id="Xview_sponsored_child_property_form" model="ir.ui.view">
-            <field name="name">Sponsored Child</field>
-            <field name="model">res.partner</field>
-            <field name="priority">3</field>
-            <!-- <field name="inherit_id" ref="base.view_partner_form"/> -->
-            <field name="arch" type="xml">
-                <form>
-                    <group colspan="2">
-                    <field name="name" />
-                    <field name="gender" widget="selection" />
-                    <field name="date_of_birth" />
-                    </group>
-
-
-                    <field name="sponsors" colspan="4" nolabel="1"
-       context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
-                <!--
-                    <page string="Sponsorship" col="4" name="sponsorship">
-                        <group col="4"> -->
-                    <group colspan="2">
-
-                            <field name="school" />
-                            <field name="school_class" />
-                    </group>
-<!--                            <field name="sponsor_id" /> -->
-<!--                        </group> -->
-                        <group col="2">
-                            <field name="text_info_eng" />
-                            <field name="text_info_nor" />
-                            <field name="village" />
-                            <field name="needs_sponsor" readonly="1"/>
-                        </group>
-                        <group col="2" string="Parents">
-                            <field name="parent_1" />
-                            <field name="parent_2" />
-                        </group>
-<!--                    </page>
-                </page> -->
-                </form>
-            </field>
-            </record>
-
         <!-- wizard -->
 
        <record id="view_sponsorship_wizard" model="ir.ui.view">
@@ -84,156 +42,103 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="parent_id" position="before"  attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                    <field name="child_ident" placeholder="Reference..." attrs="{'invisible':[('sponsored_child','!=',True)]}"/>
+                    <div>
+                        <div class="oe_button_box oe_right" attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                        <field name="state" widget="statusbar" statusbar_visible="draft,open,inactive"
+                               statusbar_colors='{"draft":"blue","inactive":"blue"}'/>
+                    </div>
+                    <div class="oe_button_box oe_left" attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                        <button name="child_open" type="workflow" states="draft" string="Validate" class="oe_highlight"/>
+                        <!-- groups="account.group_account_invoice"/> -->
+                        <button name="child_inactive" type="workflow" states="open" string="Close" class="oe_highlight"/>
+                        <button name="child_draft" type="workflow" states="inactive" string="Reopen" class="oe_highlight"/>
+                     </div>
+
+                    </div>
+                </field>
+                <field name="category_id" position="after" attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                    <field name="village" placeholder="Village...." attrs="{'invisible':[('sponsored_child','!=',True)]}"/>
+                </field>
+
                 <notebook position="inside">
 
                     <page string="Sponsorship">
                         <group cols="4">
                             <field name="sponsor" readonly="1"/>
                             <field name="sponsored_child" readonly="1"/>
-                         </group>
-                        <group colspan="1"  attrs="{'invisible':[('sponsor','!=',True)]}">
-                            <label for="sponsored_children" />
-                                <field name="sponsored_children" nolabel="1"/>
-                               <field name="mailing_address" />
+                        </group>
+                        <group colspan="1" attrs="{'invisible':[('sponsor','!=',True)]}">
+                            <label for="sponsored_children"/>
+                            <field name="sponsored_children" nolabel="1"/>
+                            <field name="mailing_address"/>
                             <!-- Fadderbevis -->
-                                <group  attrs="{'invisible': [ ('mailing_address', '=', False)]}">
-                                            <label for="street" string="Mailing Address"/>
-                            <div>
-                                <field name="mailing_name" placeholder="Name...." />
-                                <field name="mailing_street" placeholder="Street..."   />
-                                <field name="mailing_street2"  />
-                                <div class="address_format">
-                                    <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
-                                    <field name="mailing_city" placeholder="City" style="width: 40%%" />
-                                    <field name="mailing_state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)" />
-                                    <field name="mailing_zip" placeholder="ZIP" style="width: 20%%" />
+                            <group attrs="{'invisible': [ ('mailing_address', '=', False)]}">
+                                <label for="street" string="Mailing Address"/>
+                                <div>
+                                    <field name="mailing_name" placeholder="Name...."/>
+                                    <field name="mailing_street" placeholder="Street..."/>
+                                    <field name="mailing_street2"/>
+                                    <div class="address_format">
+                                        <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
+                                        <field name="mailing_city" placeholder="City" style="width: 40%%"/>
+                                        <field name="mailing_state_id" class="oe_no_button" placeholder="State"
+                                               style="width: 37%%" options='{"no_open": True}'
+                                               on_change="onchange_state(state_id)"/>
+                                        <field name="mailing_zip" placeholder="ZIP" style="width: 20%%"/>
+                                    </div>
+                                    <field name="mailing_country_id" placeholder="Country" class="oe_no_button"
+                                           options='{"no_open": True}'/>
                                 </div>
-                                <field name="mailing_country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
-                            </div>
-                    </group>
+                            </group>
 
-                    </group>
-                    <group colspan="2" attrs="{'invisible':[('sponsored_child','!=',True)]}">
-                        <field name="gender" widget="selection" />
-                            <field name="date_of_birth" />
-                            <field name="birthyear" />
-                            <field name="school" />
-                            <field name="school_class" />
-                            <field name="text_info_eng" />
-                            <field name="text_info_nor" />
-                            <field name="village" />
+                        </group>
+                        <group colspan="2" attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                            <field name="gender" widget="selection"/>
+                            <field name="date_of_birth"/>
+                            <field name="birthyear"/>
+                            <field name="school"/>
+                            <field name="school_class"/>
+                            <field name="text_info_eng"/>
+                            <field name="text_info_nor"/>
+                            <field name="village"/>
                             <field name="needs_sponsor" readonly="1"/>
                             <group col="2" string="Parents">
-                                <field name="parent_1" />
-                                <field name="parent_2" />
+                                <field name="father"/>
+                                <field name="mother"/>
                             </group>
-                        <field name="sponsors" colspan="4" nolabel="1"
-               context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
-                    </group>
-<!--    <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" attrs="{'invisible':[('sponsor','!=',True)]}" /> -->
+                            <field name="sponsors" colspan="4" nolabel="1"
+                                   context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
+                        </group>
+                        <!--    <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" attrs="{'invisible':[('sponsor','!=',True)]}" /> -->
                     </page>
                 </notebook>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_child_form">
-            <field name="name">res.partner.form.inherit</field>
+
+        <record model="ir.ui.view" id="child_tree">
+            <field name="name">Sponsored Children</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="view_partner_form"/>
+            <field name="priority" eval="10" />
             <field name="arch" type="xml">
-                <field name="parent_id" position="before">
-                    <field name="ref" placeholder="Reference..." />
-                </field>
-                <field name="category_id" position="after">
-                    <field name="village" placeholder="Village...." />
-                </field>
+                <tree string="Members">
+                    <field name="name"/>
+<!--                    <field name="membership_state"/>
+                    <field name="associate_member" attrs="{'invisible':[('membership_state', '!=', 'none')]}"/>
+                    <field name="membership_start"/>
+                    <field name="membership_stop"/> -->
+                    <field name="user_id" invisible="1"/>
+                </tree>
             </field>
         </record>
-
-
-        <record id="Xview_sponsor_property_form" model="ir.ui.view">
-            <!-- <field name="name">res.partner.property.form.inherit</field> -->
-            <field name="name">Sponsor formt</field>
-            <field name="model">res.partner</field>
-            <field name="priority">3</field>
-            <!-- <field name="inherit_id" ref="base.view_partner_form" /> -->
-            <field name="arch" type="xml">
-		<form>
-                <!-- <button name="action_add_sponsorship" type="object" string="Add sponsorship" attrs="{'invisible':['|',('sent','=',True), ('state', '!=', 'open')]}" class="oe_highlight" groups="base.group_user"/> -->
-            <!-- button can be type="object" -->
-                <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight" />
-<!--                <page string="Accounting" col="4" name="accounting" attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}" groups="account.group_account_invoice">
- -->
-            <sheet>
-
-            <field name="image" widget='image' class="oe_left oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
-                <div class="oe_title oe_left">
-                        <h1>
-                            <field name="name" default_focus="1" placeholder="Name" />
-                        </h1>
-                </div>
-
-                <!-- Faktura adresse -->
-                <div class="oe_right oe_button_box" name="buttons"> </div>
-                <group>
-                                            <label for="street" string="Address"/>
-                            <div>
-                                <field name="street" placeholder="Street..."   />
-                                <field name="street2"  />
-                                <div class="address_format">
-                                    <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
-                                    <field name="city" placeholder="City" style="width: 40%%" />
-                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)" />
-                                    <field name="zip" placeholder="ZIP" style="width: 20%%" />
-                                </div>
-                                <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
-                            </div>
-                    </group>
-                <field name="mailing_address" hidden="True" />
-                    <!-- Fadderbevis -->
-                                <group  attrs="{'invisible': [ ('mailing_address', '=', False)]}">
-                                            <label for="street" string="Mailing Address"/>
-                            <div>
-                                <field name="mailing_street" placeholder="Street..."   />
-                                <field name="mailing_street2"  />
-                                <div class="address_format">
-                                    <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
-                                    <field name="mailing_city" placeholder="City" style="width: 40%%" />
-                                    <field name="mailing_state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}' on_change="onchange_state(state_id)" />
-                                    <field name="mailing_zip" placeholder="ZIP" style="width: 20%%" />
-                                </div>
-                                <field name="mailing_country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
-                            </div>
-                    </group>
-
-
-                <!-- context="{'default_parent_id" : active_id, 'default_start_date' : start_date}">  -->
-<!--                <notebook colspan="4">
-                    <page string="children">
-                    <field name="sponsored_children" mode="kanban" conext="{'default_start_date' : start_date}">
-                        <kanban>
-                            <field name="start_date" />
-                        </kanban>
-                    </field>
-                    </page>
-                </notebook>
--->
-                <label for="phone" />
-<field name="phone" />
-                <label for="sponsored_children" />
-                            <field name="sponsored_children" readonly="True" />
-
-                <label for="sponsor_info" />
-<field name="sponsor_info" />
-            </sheet>
-</form>
-            </field>
-            </record>
 
 
         <record model="ir.ui.view" id="sponsors_tree">
             <field name="name">Sponsors</field>
             <field name="model">res.partner</field>
+            <field name="priority" eval="15" />
             <field name="arch" type="xml">
                 <tree string="Members">
                     <field name="name"/>
@@ -302,7 +207,7 @@
 <!--                    <field name="membership_stop" string="End Membership Date"/> -->
                     <field name="name"
                        filter_domain="['|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self)]"/>
-                    <field name="ref" filter_domain="[('ref', 'ilike', self)]" />
+                    <field name="child_ident" filter_domain="[('child_ident', 'ilike', self)]" />
                    <separator/>
                     <filter string="Sponsors" name="sponsor" icon="terp-personal" domain="[('sponsor','=',1)]" help="Sponsor Partners"/>
                     <separator/>
@@ -336,6 +241,7 @@
         <record model="ir.actions.act_window.view" id="action_sponsors_view_tree">
             <field name="sequence" eval="2"/>
             <field name="view_mode">tree</field>
+            <field name="view_type">tree</field>
             <field name="view_id" ref="sponsors_tree"/>
             <field name="act_window_id" ref="action_sponsors"/>
         </record>
@@ -343,6 +249,7 @@
         <record model="ir.actions.act_window.view" id="action_sponsors_view_form">
             <field name="sequence" eval="3"/>
             <field name="view_mode">form</field>
+            <field name="view_type">form</field>
             <field name="view_id" ref="base.view_partner_form"/>
             <field name="act_window_id" ref="action_sponsors"/>
         </record>
@@ -365,14 +272,16 @@
         <record model="ir.actions.act_window.view" id="action_children_view_tree">
             <field name="sequence" eval="2"/>
             <field name="view_mode">tree</field>
-            <field name="view_id" ref="sponsors_tree"/>
+            <field name="view_typee">tree</field>
+            <field name="view_id" ref="child_tree"/>
             <field name="act_window_id" ref="action_children"/>
         </record>
 
         <record model="ir.actions.act_window.view" id="action_children_view_form">
             <field name="sequence" eval="3"/>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="view_child_form"/>
+            <field name="view_type">tree</field>
+            <!-- <field name="view_id" ref="view_child_form"/> -->
             <field name="act_window_id" ref="action_children"/>
         </record>
 

@@ -52,23 +52,34 @@ class SponsoredChild(models.Model):
     needs_sponsor = fields.Boolean(string = 'Needs sponsor', store=True, compute=_calc_needs_sponsor, default=True)
     #sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
     sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
-    parent_1 = fields.Char(string = 'Parent 1')
-    parent_2 = fields.Char(string = 'Parent 2')
+    father = fields.Char(string = 'Father')
+    mother = fields.Char(string = 'Mother')
+    child_ident = fields.Char(string = 'Child Code', required=True)
 
-    sponsors = fields.One2many('sponsorship', 'sponsored_child')
-    previous_images = fields.One2many('child_image', 'sponsor_id', string='Previous images')
-    number_of_images = fields.Integer(string = 'Number of pictures', compute=_get_number_of_images)
+    state = fields.Selection([
+        ('draft','Draft'),
+        ('open','Open'),
+        ('inactive', 'Inactive')],
+        string='Status', index=True, readonly=True, default='draft',
+        track_visibility='onchange', copy=False,
+        help = "* The 'Draft' state is used when a child is just entered into the system.\n"
+        "* The 'Open' state is when a child has been approved and is active.\n"
+        "* The 'Inactive' state is when a child is no longer active.\n"
+    )
 
     @api.one
-    def store_old_image(self):
-        if not self.image:
-            return
-        child_image_env = self.env['child_image']
-        child_image_env.create( {'image' : self.image,
-                                 'sponsor_id' : self.id})
+    def action_draft(self):
+        self.state = 'draft'
 
-        print "STORE OLD IMAGE", self.previous_images, self.image
+    @api.one
+    def action_validate(self):
+        self.state = 'open'
 
+    @api.one
+    def action_inactive(self):
+        self.state = 'inactive'
+
+    sponsors = fields.One2many('sponsorship', 'sponsored_child')
 
 
     def write(self, cr, uid, id, vals, context=None, check=True, update_check=True):
@@ -108,10 +119,3 @@ class School(models.Model):
     name = fields.Char(string = 'School')
     village = fields.Many2one('village', 'Village', ondelete='restrict')
 
-
-class ChildImage(models.Model):
-    _name = 'child_image'
-
-    image = fields.Binary("Image",
-            help="This field holds the image used as avatar for this contact")
-    sponsor_id = fields.Many2one('res.partner', string = 'Sponsor')
