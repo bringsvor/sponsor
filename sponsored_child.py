@@ -18,6 +18,10 @@ class SponsoredChild(models.Model):
     @api.one
     @api.depends('date_of_birth', 'birthyear')
     def _calc_age(self):
+        if not self.sponsored_child:
+            self.probable_age = None
+            return
+
         now = datetime.date.today().year
         if self.date_of_birth:
             dob_year =  datetime.datetime.strptime(self.date_of_birth,'%Y-%m-%d').year
@@ -25,7 +29,7 @@ class SponsoredChild(models.Model):
         elif self.birthyear:
             self.probable_age = now - self.birthyear
         else:
-            raise Warning('Either birthdate or birth year must be set.')
+            raise Warning(_('Either birthdate or birth year must be set.'))
 
     @api.one
     @api.depends('previous_images')
@@ -39,35 +43,44 @@ class SponsoredChild(models.Model):
         else:
             self.number_of_images = number + len(self.previous_images)
 
-    sponsored_child = fields.Boolean(string = 'Sponsored Child')
-    gender = fields.Selection(string = 'Gender', selection=[('male', 'Male'), ('female', 'Female')])
-    school = fields.Many2one('school', 'eSchool', ondelete='restrict')
-    date_of_birth = fields.Date(string = 'Date of birth')
-    birthyear = fields.Integer(string = 'Birthyear')
-    school_class = fields.Char(string = 'Class in school')
+    def included_visits(self, all_visits):
+        return filter(lambda visit: visit.include_in_letter, all_visits)
 
-    text_info_eng = fields.Text(string = 'Description (English)')
-    text_info_nor = fields.Text(string = 'Description (Norwegian)')
-    village = fields.Many2one('village', 'Village', ondelete='restrict')
+    def sponsor_names(self):
+        return [x.sponsor_id.name for x in self.sponsors]
 
-    probable_age = fields.Integer(string = 'Probable age', store=True, compute=_calc_age)
-    needs_sponsor = fields.Boolean(string = 'Needs sponsor', store=True, compute=_calc_needs_sponsor, default=True)
+    @api.one
+    def _get_address(self):
+        self.child_address = self.village.child_address
+
+    child_address = fields.Char(string = _('Address'), compute=_get_address)
+    sponsored_child = fields.Boolean(string = _('Sponsored Child'))
+    gender = fields.Selection(string = _('Gender'), selection=[('male', _('Male')), ('female', _('Female'))])
+    school = fields.Many2one('school', _('School'), ondelete='restrict')
+    date_of_birth = fields.Date(string = _('Date of birth'))
+    birthyear = fields.Integer(string = _('Birthyear'))
+    school_class = fields.Char(string = _('Class in school'))
+    text_info = fields.One2many('child_info', 'sponsored_child')
+    village = fields.Many2one('village', _('Village'), ondelete='restrict', track_visibility='onchange')
+
+    probable_age = fields.Integer(string = _('Probable age'), store=True, compute=_calc_age)
+    needs_sponsor = fields.Boolean(string = _('Needs sponsor'), store=True, compute=_calc_needs_sponsor, default=True)
     #sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
     ####sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
-    father = fields.Char(string = 'Father')
-    mother = fields.Char(string = 'Mother')
+    father = fields.Char(string = _('Father'))
+    mother = fields.Char(string = _('Mother'))
     sponsors = fields.One2many('sponsorship', 'sponsored_child')
-    child_ident = fields.Char(string = 'Child Code')
+    child_ident = fields.Char(string = _('Child Code'))
 
     state = fields.Selection([
-        ('draft','Draft'),
-        ('open','Open'),
-        ('inactive', 'Inactive')],
-        string='Status', index=True, readonly=True, default='draft',
+        ('draft',_('Draft')),
+        ('open',_('Open')),
+        ('inactive', _('Inactive'))],
+        string=_('Status'), index=True, readonly=True, default='draft',
         track_visibility='onchange', copy=False,
-        help = "* The 'Draft' state is used when a child is just entered into the system.\n"
+        help = _("* The 'Draft' state is used when a child is just entered into the system.\n"
         "* The 'Open' state is when a child has been approved and is active.\n"
-        "* The 'Inactive' state is when a child is no longer active.\n"
+        "* The 'Inactive' state is when a child is no longer active.\n")
     )
 
     @api.one
@@ -95,9 +108,9 @@ class SponsoredChild(models.Model):
         return self.env['report'].get_action(self, 'sponsor.report_sponsorship_view')
 
 
-    def write(self, cr, uid, id, vals, context=None, check=True, update_check=True):
+    def Xwrite(self, cr, uid, id, vals, context=None, check=True, update_check=True):
         body = ''
-
+        print "WRITE", vals
         partner = self.browse(cr, uid, id)
         for attribute, value in vals.items():
             if attribute == 'image':
@@ -120,19 +133,40 @@ class SponsoredChild(models.Model):
 class Village(models.Model):
     _name = 'village'
 
-    name = fields.Char(string = 'Village')
-    district_name = fields.Char(string = 'District')
+    @api.one
+    def village_address(self):
+        print "VILLAGE ADDRESS", self.child_address
+        print "VILLAGE", self.name, self.district_name, self.country_id
+        return self.child_address
 
-    country_id = fields.Many2one('res.country', 'Country', ondelete='restrict')
-    description = fields.Char(string = 'Village description')
+
+    @api.one
+    def _get_address(self):
+        address =  "%(name)s<br/>%(district_name)s<br/>%(country_name)s" % {
+            'name' : self.name,
+            'district_name' : self.district_name,
+            'country_name' : self.country_id.name
+        }
+        self.child_address = address
+
+    name = fields.Char(string = _('Village'))
+    district_name = fields.Char(string = _('District'))
+
+    country_id = fields.Many2one('res.country', _('Country'), ondelete='restrict')
+    description = fields.Char(string = _('Village description'))
+    child_address = fields.Char(string = 'Address', readonly=True, compute=_get_address)
 
 class School(models.Model):
     _name = 'school'
 
-    name = fields.Char(string = 'School')
-    village = fields.Many2one('village', 'Village', ondelete='restrict')
+    name = fields.Char(string = _('School'))
+    village = fields.Many2one('village', _('Village'), ondelete='restrict')
 
-class SponsorLetter(models.Model):
-    _name = 'sponsor_letter'
-
-    child_id = fields.Many2one('res.partner', 'Child', ondelete='restrict')
+class ChildInfo(models.Model):
+    _name = 'child_info'
+    _description = 'Information about a visit with the child.'
+    when = fields.Char(string = _('Time of visit'))
+    include_in_letter = fields.Boolean(string = _('Include in sponsor letter'), default=True)
+    text_info_eng = fields.Text(string = _('Description (English)'))
+    text_info_nor = fields.Text(string = _('Description (Norwegian)'))
+    sponsored_child = fields.Many2one('res.partner', _('Child'), ondelete='restrict')

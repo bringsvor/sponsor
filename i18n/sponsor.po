@@ -1,0 +1,579 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sponsor
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-29 10:30+0000\n"
+"PO-Revision-Date: 2014-10-29 10:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:68
+#: help:res.partner,state:0
+#, python-format
+msgid "* The 'Draft' state is used when a child is just entered into the system.\n"
+"* The 'Open' state is when a child has been approved and is active.\n"
+"* The 'Inactive' state is when a child is no longer active.\n"
+""
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Barnetds navn"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:46
+#: field:res.partner,birthyear:0
+#, python-format
+msgid "Birthyear"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+msgid "Body content"
+msgstr ""
+
+#. module: sponsor
+#: view:add_sponsorship_wizard:sponsor.view_sponsorship_wizard
+msgid "Cancel"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:138
+#: field:sponsor_letter,child_id:0
+#: field:sponsorship,sponsored_child:0
+#, python-format
+msgid "Child"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:60
+#: field:res.partner,child_ident:0
+#, python-format
+msgid "Child Code"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,child_id:0
+msgid "Child id"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.actions.act_window,name:sponsor.action_children
+msgid "Children"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+msgid "Children needing sponsor"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "City"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:47
+#: field:res.partner,school_class:0
+#, python-format
+msgid "Class in school"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Close"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:126
+#: view:res.partner:sponsor.view_partner_form
+#: field:village,country_id:0
+#, python-format
+msgid "Country"
+msgstr ""
+
+#. module: sponsor
+#: view:add_sponsorship_wizard:sponsor.view_sponsorship_wizard
+msgid "Create"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,create_uid:0
+#: field:school,create_uid:0
+#: field:sponsor_letter,create_uid:0
+#: field:sponsorship,create_uid:0
+#: field:village,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,create_date:0
+#: field:school,create_date:0
+#: field:sponsor_letter,create_date:0
+#: field:sponsorship,create_date:0
+#: field:village,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:45
+#: field:res.partner,date_of_birth:0
+#, python-format
+msgid "Date of birth"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:49
+#: field:res.partner,text_info_eng:0
+#, python-format
+msgid "Description (English)"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:50
+#: field:res.partner,text_info_nor:0
+#, python-format
+msgid "Description (Norwegian)"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:124
+#: field:village,district_name:0
+#, python-format
+msgid "District"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:63
+#: selection:res.partner,state:0
+#, python-format
+msgid "Draft"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:28
+#, python-format
+msgid "Either birthdate or birth year must be set."
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,end_date:0
+msgid "End date"
+msgstr ""
+
+#. module: sponsor
+#: field:sponsorship,end_date:0
+msgid "End of sponsorship"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Fadder"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+msgid "Fadderbevis"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Farens navn"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:57
+#: field:res.partner,father:0
+#, python-format
+msgid "Father"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:43
+#: selection:res.partner,gender:0
+#, python-format
+msgid "Female"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Født"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:43
+#: field:res.partner,gender:0
+#, python-format
+msgid "Gender"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+msgid "Group By"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,id:0
+#: field:school,id:0
+#: field:sponsor_letter,id:0
+#: field:sponsorship,id:0
+#: field:village,id:0
+msgid "ID"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "IDNR"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:65
+#: selection:res.partner,state:0
+#, python-format
+msgid "Inactive"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,sponsor_info:0
+msgid "Information"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Kjønn"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Klasse"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,write_uid:0
+#: field:school,write_uid:0
+#: field:sponsor_letter,write_uid:0
+#: field:sponsorship,write_uid:0
+#: field:village,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,write_date:0
+#: field:school,write_date:0
+#: field:sponsor_letter,write_date:0
+#: field:sponsorship,write_date:0
+#: field:village,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Mailing Address"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_city:0
+msgid "Mailing City"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_street:0
+msgid "Mailing Street"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_street2:0
+msgid "Mailing Street2"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_zip:0
+msgid "Mailing Zip"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_country_id:0
+msgid "Mailing country"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_name:0
+msgid "Mailing name"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_state_id:0
+msgid "Mailing state id"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,main_sponsor:0
+msgid "Main sponsor"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:43
+#: selection:res.partner,gender:0
+#, python-format
+msgid "Male"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.child_tree
+#: view:res.partner:sponsor.sponsors_tree
+msgid "Members"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Morens navn"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:58
+#: field:res.partner,mother:0
+#, python-format
+msgid "Mother"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Name...."
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:54
+#: field:res.partner,needs_sponsor:0
+#, python-format
+msgid "Needs sponsor"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:64
+#: selection:res.partner,state:0
+#, python-format
+msgid "Open"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Parents"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.model,name:sponsor.model_res_partner
+msgid "Partner"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Print"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:53
+#: field:res.partner,probable_age:0
+#, python-format
+msgid "Probable age"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Reference..."
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Reopen"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+msgid "SPONSOR"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,sub_sponsor:0
+msgid "SUb Sponsor"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:44
+#: code:addons/sponsor/sponsored_child.py:132
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+#: field:res.partner,school:0
+#: field:school,name:0
+#, python-format
+msgid "School"
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,mailing_address:0
+msgid "Separate mailing address"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+msgid "Sidebar content"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+#: view:website:sponsor.report_sponsorship_document
+msgid "Skole"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.ui.menu,name:sponsor.menu_sponsorship_content
+#: field:res.partner,sponsor:0
+#: field:sponsorship,sponsor_id:0
+msgid "Sponsor"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+msgid "Sponsor Partners"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:42
+#: field:res.partner,sponsored_child:0
+#, python-format
+msgid "Sponsored Child"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.ui.menu,name:sponsor.menu_sponsorship_children
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+#: field:res.partner,sponsored_children:0
+msgid "Sponsored Children"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+msgid "Sponsored Chilren Needing Sponsors"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+msgid "Sponsored Chilren Partners"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.actions.act_window,name:sponsor.action_sponsors
+#: model:ir.ui.menu,name:sponsor.menu_sponsorship_sponsors
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+#: field:res.partner,sponsors:0
+msgid "Sponsors"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.actions.act_window,name:sponsor.action_add_sponsorship
+#: model:ir.ui.menu,name:sponsor.menu_sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Sponsorship"
+msgstr ""
+
+#. module: sponsor
+#: model:ir.actions.report.xml,name:sponsor.sponsor_letter
+msgid "Sponsorship Report"
+msgstr ""
+
+#. module: sponsor
+#: view:add_sponsorship_wizard:sponsor.view_sponsorship_wizard
+#: view:sponsorship:sponsor.form_sponsorship
+#: view:sponsorship:sponsor.list_sponsorship
+#: view:sponsorship:sponsor.list_sponsorship_sponsor
+msgid "Sponsorships"
+msgstr ""
+
+#. module: sponsor
+#: view:website:sponsor.Xreport_sponsorship_view
+msgid "Sponsorships:"
+msgstr ""
+
+#. module: sponsor
+#: field:add_sponsorship_wizard,start_date:0
+msgid "Start date"
+msgstr ""
+
+#. module: sponsor
+#: field:sponsorship,start_date:0
+msgid "Start of sponsorship"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "State"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:66
+#: field:res.partner,state:0
+#, python-format
+msgid "Status"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Street..."
+msgstr ""
+
+#. module: sponsor
+#: field:res.partner,sub_sponsor:0
+#: field:sponsorship,sub_sponsor_id:0
+msgid "Sub Sponsor"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Validate"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:51
+#: code:addons/sponsor/sponsored_child.py:123
+#: code:addons/sponsor/sponsored_child.py:133
+#: view:res.partner:sponsor.view_res_partner_sponsor_filter
+#: field:res.partner,village:0
+#: field:school,village:0
+#: field:village,name:0
+#, python-format
+msgid "Village"
+msgstr ""
+
+#. module: sponsor
+#: code:addons/sponsor/sponsored_child.py:127
+#: field:village,description:0
+#, python-format
+msgid "Village description"
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "Village...."
+msgstr ""
+
+#. module: sponsor
+#: view:res.partner:sponsor.view_partner_form
+msgid "ZIP"
+msgstr ""
+

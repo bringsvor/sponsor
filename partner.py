@@ -18,8 +18,8 @@ class Sponsorship(models.Model):
     #sponsor_id = fields.Many2one('sponsor_id', string='Sponsor',
     #    ondelete='cascade', index=True)
 
-    sponsor_id = fields.Many2one('res.partner', string = 'Sponsor')
-    sub_sponsor_id = fields.Many2one('res.partner', string = 'Sub Sponsor')
+    sponsor_id = fields.Many2one('res.partner', string = 'Sponsor', domain="[('sponsor', '=', 'True')]")
+    sub_sponsor_id = fields.Many2one('res.partner', string = 'Sub Sponsor', domain="[('sub_sponsor', '=', 'True')]")
     sponsored_child = fields.Many2one('res.partner', string = 'Child', domain=[('sponsored_child', '=', 'True')])
 
 

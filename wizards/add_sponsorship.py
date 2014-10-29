@@ -1,6 +1,6 @@
 __author__ = 'tbri'
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 
 class add_sponsorship_wizard(models.TransientModel):
     _name = 'add_sponsorship_wizard'
@@ -10,16 +10,17 @@ class add_sponsorship_wizard(models.TransientModel):
         c = []
         children =  self.env['res.partner'].search([('sponsored_child', '=', 'True')])
         for n in children:
-            c.append( (n.id, n.name))
+            child_ref = '%s %s' % (n.child_ident, n.name)
+            c.append( (n.id, child_ref) )
         return c
 
     #sponsor_id = fields.Many2one('sponsor')
     # see partner.py...........
     ## child_id = fields.Many2one('sponsored_child',  domain=[('active','=',True)])
-    child_id = fields.Selection( _get_all_children )
-    sub_sponsor = fields.Many2one('res.partner', 'SUb Sponsor', domain=[('sub_sponsor','=',True)])
-    start_date = fields.Date('Start date')
-    end_date = fields.Date('End date')
+    child_id = fields.Selection( _get_all_children , string=_('Child'))
+    sub_sponsor = fields.Many2one('res.partner', _('Sub Sponsor'), domain=[('sub_sponsor','=',True)])
+    start_date = fields.Date(_('Start date'))
+    end_date = fields.Date(_('End date'))
 
     @api.one
     def data_save(self):

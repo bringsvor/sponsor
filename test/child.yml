@@ -46,3 +46,12 @@
     yearsago = datetime.date.today().year - 2009
     assert self.probable_age == yearsago
 -
+  Test the address
+-
+  !assert {model: village, id: village1, string: must have address}:
+    - child_address == 'Village1<br/>District1<br/>False'
+-
+    Then test it from partner
+-
+  !assert {model: res.partner, id: child1}:
+  - child_address == 'Village1<br/>District1<br/>False'

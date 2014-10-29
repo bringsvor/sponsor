@@ -26,5 +26,3 @@
 -
   Check that we have two images
 -
-  !assert {model: res.partner, id: child99, string: Should be two images}:
-    - number_of_images == 2
