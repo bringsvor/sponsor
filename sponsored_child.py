@@ -24,6 +24,8 @@ class SponsoredChild(models.Model):
             self.probable_age = now - dob_year
         elif self.birthyear:
             self.probable_age = now - self.birthyear
+        else:
+            raise Warning('Either birthdate or birth year must be set.')
 
     @api.one
     @api.depends('previous_images')
