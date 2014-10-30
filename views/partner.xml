@@ -109,8 +109,7 @@
                     <field name="village" placeholder="Village...." attrs="{'invisible':[('sponsored_child','!=',True)]}"/>
                 </field>
 
-                <notebook position="inside">
-
+                <xpath expr="//notebook/page[@string='Internal Notes']" position="before">
                     <page string="Sponsorship">
                         <group cols="4">
                             <field name="sponsor" readonly="1"/>
@@ -118,27 +117,9 @@
                         </group>
                         <group colspan="1" attrs="{'invisible':[('sponsor','!=',True)]}">
                             <label for="sponsored_children"/>
-                            <field name="sponsored_children" nolabel="1"/>
-                            <field name="mailing_address"/>
-                            <!-- Fadderbevis -->
-                            <group attrs="{'invisible': [ ('mailing_address', '=', False)]}">
-                                <label for="street" string="Mailing Address"/>
-                                <div>
-                                    <field name="mailing_name" placeholder="Name...."/>
-                                    <field name="mailing_street" placeholder="Street..."/>
-                                    <field name="mailing_street2"/>
-                                    <div class="address_format">
-                                        <!-- attrs="{'readonly': [('use_parent_address','=',True)]}" -->
-                                        <field name="mailing_city" placeholder="City" style="width: 40%%"/>
-                                        <field name="mailing_state_id" class="oe_no_button" placeholder="State"
-                                               style="width: 37%%" options='{"no_open": True}'
-                                               on_change="onchange_state(state_id)"/>
-                                        <field name="mailing_zip" placeholder="ZIP" style="width: 20%%"/>
-                                    </div>
-                                    <field name="mailing_country_id" placeholder="Country" class="oe_no_button"
-                                           options='{"no_open": True}'/>
-                                </div>
-                            </group>
+                            <field name="sponsored_children"  nolabel="1" colspan="4"
+                                   context="{'form_view_ref' : 'sponsor.form_sponsorship_child', 'tree_view_ref' : 'sponsor.list_sponsorship'}"/>
+
 
                         </group>
                         <group colspan="2" attrs="{'invisible':[('sponsored_child','!=',True)]}">
@@ -149,19 +130,19 @@
                             <field name="school_class"/>
                             <field name="text_info"/>
                             <field name="needs_sponsor" readonly="1"/>
-                            <group col="2" string="Parents">
-                                <field name="father"/>
+                            <group colspan="2" string="Parents">
                                 <field name="mother"/>
+                                <field name="father"/>
                             </group>
                             <field name="sponsors" colspan="4" nolabel="1"
                                    context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
                         </group>
                         <!-- <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight"  attrs="{'invisible':[('sponsor','!=',True)]}" /> -->
                     </page>
-                </notebook>
+                </xpath>
             </field>
         </record>
-
+'
 
         <record model="ir.ui.view" id="child_tree">
             <field name="name">Sponsored Children</field>
@@ -203,6 +184,7 @@
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
                 <tree string="Sponsorships">
+                    <field name="child_ident" />
                     <field name="sponsored_child" />
                     <field name="start_date" />
                     <field name="end_date" />
@@ -226,6 +208,35 @@
             </field>
         </record>
 
+        <record id="list_sponsorship_sponsor" model="ir.ui.view">
+            <field name="name">sponsorship_list_view_sponsor</field>
+            <field name="model">sponsorship</field>
+            <field name="priority" eval="20" />
+            <field name="arch" type="xml">
+                <tree string="Sponsorships">
+                    <field name="start_date" />
+                    <field name="end_date" />
+                    <field name="sub_sponsor_id" />
+                    <field name="sponsor_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="list_sponsorship_mailing" model="ir.ui.view">
+            <field name="name">sponsorship_list_view</field>
+            <field name="model">sponsorship</field>
+            <field name="priority" eval="40" />
+            <field name="arch" type="xml">
+                <tree string="Sponsorships">
+                    <field name="child_ident" />
+                    <field name="sponsored_child" />
+                    <field name="sub_sponsor_id">
+                        <field name="name" />
+                            </field>
+                </tree>
+            </field>
+        </record>
+
 
         <record id="form_sponsorship" model="ir.ui.view">
             <field name="name">sponsorship_form_view</field>
@@ -242,6 +253,31 @@
             </field>
         </record>
 
+        <record id="form_sponsorship_child" model="ir.ui.view">
+            <field name="name">sponsorship_form_view_child</field>
+            <field name="model">sponsorship</field>
+            <field name="priority" eval="55" />
+            <field name="arch" type="xml">
+                <form string="Sponsored child">
+                    <group>
+                        <field name="start_date" />
+                        <field name="end_date" />
+                        <field name="child_ident" />
+                        <field name="sponsored_child" />
+                        <field name="sub_sponsor_id"  context="{'default_sub_sponsor': 'True'}" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_sponsorship_view_form_child">
+            <field name="sequence" eval="4"/>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="form_sponsorship_child"/>
+            <!-- <field name="act_window_id" ref="action_sponsors"/> -->
+        </record>
 
         <record id="view_res_partner_sponsor_filter" model="ir.ui.view">
             <field name="name">res.partner.select</field>
@@ -276,6 +312,24 @@
                 </search>
             </field>
         </record>
+
+
+        <record id="action_sponsorships" model="ir.actions.act_window">
+            <field name="name">Sponsorships</field>
+            <field name="res_model">sponsorship</field> <!--
+            <field name="search_view_id" ref="view_sponsorhip_filter"/>
+            <field name="context">{"search_default_sponsor": 1, "default_sponsor": True}</field> -->
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_sponsorships_view_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="list_sponsorship_mailing"/>
+            <field name="act_window_id" ref="action_sponsorships"/>
+        </record>
+
 
         <record id="action_sponsors" model="ir.actions.act_window">
             <field name="name">Sponsors</field>
@@ -348,7 +402,7 @@
         <menuitem id="menu_sponsorship_content" parent="menu_sponsor" name="Sponsor" />
         <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Sponsored Children" action="action_children" />
         <menuitem id="menu_sponsorship_sponsors" parent="menu_sponsorship_content" name="Sponsors" action="action_sponsors" />
-
+        <menuitem id="menu_sponsorship_sponsorships" parent="menu_sponsorship_content" name="Sponsorships" action="action_sponsorships" />
 
 
     </data>

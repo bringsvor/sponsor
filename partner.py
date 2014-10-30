@@ -13,6 +13,37 @@ class Sponsorship(models.Model):
     def _sponsored_children(self):
         return 'GEI?'
 
+    @api.multi
+    def mailing(self,field):
+        for sponsorship in self:
+            if sponsorship.sub_sponsor_id:
+                node = sponsorship.sub_sponsor_id
+            else:
+                node = sponsorship.sponsor_id
+
+            return node[field]
+
+
+    @api.one
+    def _get_mailing(self):
+        print "MAILING"
+        self.mailing_name = 'HEI'
+
+    @api.onchange('child_ident')
+    def _change_ident(self):
+        print "ONCANGE", self.child_ident
+        if not self.child_ident:
+            return
+        new_child = self.env['res.partner'].search([('child_ident', '=', self.child_ident)])
+        if len(new_child)==1:
+            self.sponsored_child = new_child
+        else:
+            return {
+                'warning' : {'title' : _("Error"),
+                         'message' : _("Unknown child ident %s") % self.child_ident}
+            }
+
+
     start_date = fields.Date(string = 'Start of sponsorship')
     end_date = fields.Date(string = 'End of sponsorship')
     #sponsor_id = fields.Many2one('sponsor_id', string='Sponsor',
@@ -21,7 +52,9 @@ class Sponsorship(models.Model):
     sponsor_id = fields.Many2one('res.partner', string = 'Sponsor', domain="[('sponsor', '=', 'True')]")
     sub_sponsor_id = fields.Many2one('res.partner', string = 'Sub Sponsor', domain="[('sub_sponsor', '=', 'True')]")
     sponsored_child = fields.Many2one('res.partner', string = 'Child', domain=[('sponsored_child', '=', 'True')])
+    child_ident = fields.Char(string = 'Child IDNR', related='sponsored_child.child_ident', store=True)
 
+    mailing_name = fields.Char(string = 'Mailing name', compute=_get_mailing)
 
 class SubSponsor(models.Model):
     _inherit = 'res.partner'
@@ -29,6 +62,34 @@ class SubSponsor(models.Model):
     sub_sponsor = fields.Boolean(string = 'Sub Sponsor')
     main_sponsor = fields.Many2one('res.partner', 'Main sponsor', ondelete='restrict')
 
+    @api.one
+    def check_links(self):
+
+        print "CHECK LINKS"
+        sponsorship_sponsor = self.env['sponsorship'].search([('sponsor_id', '=', self.id)])
+        sponsorship_child = self.env['sponsorship'].search([('sponsored_child', '=', self.id)])
+        sponsorship_sub_sponsor = self.env['sponsorship'].search([('sub_sponsor_id', '=', self.id)])
+
+        description = None
+        if len(sponsorship_sponsor):
+            description = 'a sponsor.'
+        elif len(sponsorship_child):
+            description = 'a sponsored child.'
+        elif len(sponsorship_sub_sponsor):
+            description = 'a sub sponsor.'
+
+        print "DESCRIPTION", description
+        if description:
+            raise Warning(_("Partner %s cannot be deleted since it is %s") % (self.name, description))
+
+
+    def unlink(self, cr, uid, ids, context=None):
+        print "UNLINK"
+        retval = self.check_links(cr, uid, ids, context)
+        if retval:
+            return retval
+
+        return super(SubSponsor, self).unlink(cr, uid, ids, context=context)
 
 class Sponsor(models.Model):
     #_name = 'sponsor'
@@ -68,13 +129,5 @@ class Sponsor(models.Model):
     sponsored_children = fields.One2many('sponsorship', 'sponsor_id', string='Sponsored Children')
     sponsor_info = fields.Html(string = 'Information')
     sponsor = fields.Boolean(string = 'Sponsor')
-    mailing_name = fields.Char('Mailing name')
-    mailing_address = fields.Boolean(string = 'Separate mailing address')
-    mailing_street  = fields.Char('Mailing Street')
-    mailing_street2  = fields.Char('Mailing Street2')
-    mailing_city  = fields.Char('Mailing City')
-    mailing_state_id  = fields.Many2one('res.country.state', ondelete='restrict')
-    mailing_zip = fields.Char('Mailing Zip', size=24, change_default=True)
-    mailing_country_id = fields.Many2one('res.country', 'Mailing country', ondelete='restrict')
 
     # TODO Clean this up

@@ -6,7 +6,8 @@
         string="Sponsorship Report"
         name="sponsor.report_sponsorship_view"
         file="sponsor.report_sponsorship"
-        report_type="qweb-html" />
+        report_type="qweb-pdf" />
+
 
 
 <template id="report_sponsorship_document">
@@ -67,7 +68,7 @@
                 </thead> -->
                 <tbody class="invoice_tbody">
                     <tr>
-                        <td>
+                        <td width="50%">
 
                         <b>IDNR</b> <span t-field="o.child_ident"/><br/>
                         <b>Barnetds navn</b> <span t-field="o.name" /><br/>
@@ -101,10 +102,20 @@
                             </t>
 
                         </td>
-                        <td>
+                        <td width="50%">
                             <t t-foreach="o.image_ids" t-as="img">
-                                    <img t-if="img_first == False" t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="128" class="cal_avatar"/><br/>
-                                    <img t-if="img_first" t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="256" class="cal_avatar"/><br/>
+                                <div t-if="img_first">
+                                    <figure  style="display: inline-block;">
+                                        <img t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="256" class="pull_right cal_avatar"/>
+                                        <figcaption t-if="img.description"><span t-esc="img.description" /> </figcaption>
+                                    </figure>
+                                <br/>
+                                </div>
+                                    <figure  style="display: inline-block;">
+                                    <img t-if="img_first == False" t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="128" class="pull_right cal_avatar"/>
+                                        <figcaption t-if="img_first == False and img.description"><span t-esc="img.description" /> </figcaption>
+                                </figure>
+                                <br t-if="img_even" />
                             </t>
                         </td>
 <!--                     <tr t-foreach="o.invoice_line" t-as="l">

@@ -1,0 +1,46 @@
+<openerp>
+<data>
+
+    <report
+        id="sponsor_mailing"
+        model="sponsorship"
+        string="Sponsorship Mailing Addresses"
+        name="sponsor.report_sponsorship_mail"
+        file="sponsor.report_sponsorship_mail"
+        report_type="qweb-html" />
+
+    <template id="report_sponsorship_mail">
+        <t t-call="report.html_container">
+        <t t-call="sponsor.report_layout">
+
+                <div class="page">
+
+                    <h1>Mailinglist</h1>
+                    <table class="table table-condensed">
+                                <thead>
+                    <tr>
+                        <th>Child IDNR</th>
+                        <th>Sponsor name</th>
+                        <th>Street 1</th>
+                        <th>Street 2</th>
+                        <th>ZIP</th>
+                        <th>City</th>
+                    </tr>
+                </thead>
+                    <tbody class="invoice_tbody">
+                        <tr t-foreach="docs" t-as="sponsorship">
+                            <td><span t-field="sponsorship.child_ident" /></td>
+                            <td><span t-esc="sponsorship.mailing('name')" /></td>
+                            <td><span t-esc="sponsorship.mailing('street')" /></td>
+                            <td><span t-esc="sponsorship.mailing('street2')" /></td>
+                            <td><span t-esc="sponsorship.mailing('zip')" /></td>
+                            <td><span t-esc="sponsorship.mailing('city')" /></td>
+                        </tr>
+                            </tbody>
+                    </table>
+                        </div>
+        </t>
+        </t>
+        </template>
+    </data>
+    </openerp>

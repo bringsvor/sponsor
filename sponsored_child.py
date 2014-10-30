@@ -56,10 +56,10 @@ class SponsoredChild(models.Model):
     child_address = fields.Char(string = _('Address'), compute=_get_address)
     sponsored_child = fields.Boolean(string = _('Sponsored Child'))
     gender = fields.Selection(string = _('Gender'), selection=[('male', _('Male')), ('female', _('Female'))])
-    school = fields.Many2one('school', _('School'), ondelete='restrict')
+    school = fields.Many2one('school', _('School'), ondelete='restrict', track_visibility='onchange')
     date_of_birth = fields.Date(string = _('Date of birth'))
     birthyear = fields.Integer(string = _('Birthyear'))
-    school_class = fields.Char(string = _('Class in school'))
+    school_class = fields.Char(string = _('Class in school'), track_visibility='onchange')
     text_info = fields.One2many('child_info', 'sponsored_child')
     village = fields.Many2one('village', _('Village'), ondelete='restrict', track_visibility='onchange')
 
@@ -67,8 +67,9 @@ class SponsoredChild(models.Model):
     needs_sponsor = fields.Boolean(string = _('Needs sponsor'), store=True, compute=_calc_needs_sponsor, default=True)
     #sponsor_name = fields.Char(string = 'Sponsor name', compute=_get_sponsor_name)
     ####sponsorships = fields.One2many('sponsorship', 'sponsor_id', string='Sponsors')
-    father = fields.Char(string = _('Father'))
-    mother = fields.Char(string = _('Mother'))
+    mother = fields.Char(string = _('Mother'), size=32)
+    father = fields.Char(string = _('Father'), size=32)
+
     sponsors = fields.One2many('sponsorship', 'sponsored_child')
     child_ident = fields.Char(string = _('Child Code'))
 
