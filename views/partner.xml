@@ -89,14 +89,14 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="parent_id" position="before"  attrs="{'invisible':[('sponsored_child','!=',True)]}">
-                    <field name="child_ident" placeholder="Reference..." attrs="{'invisible':[('sponsored_child','!=',True)]}"/>
+                    <field name="child_ident" placeholder="Child ident..." attrs="{'invisible':[('sponsored_child','!=',True)],'required' : [('sponsored_child', '=', True)]}"/>
                     <div>
                         <div class="oe_button_box oe_right" attrs="{'invisible':[('sponsored_child','!=',True)]}">
                         <field name="state" widget="statusbar" statusbar_visible="draft,active,inactive"
                                statusbar_colors='{"draft":"blue","inactive":"blue"}'/>
                     </div>
                     <div class="oe_button_box oe_left" attrs="{'invisible':[('sponsored_child','!=',True)]}">
-                        <button name="child_open" type="workflow" states="draft" string="Validate" class="oe_highlight"/>
+                        <button name="child_active" type="workflow" states="draft" string="Validate" class="oe_highlight"/>
                         <!-- groups="account.group_account_invoice"/> -->
                         <button name="child_inactive" type="workflow" states="active" string="Close" class="oe_highlight"/>
                         <button name="child_reopen" type="workflow" states="inactive" string="Reopen" class="oe_highlight"/>
@@ -299,6 +299,22 @@
         </record>
 
 
+        <record id="form_village" model="ir.ui.view">
+            <field name="name">village_form_view</field>
+            <field name="model">village</field>
+            <field name="priority" eval="50" />
+            <field name="arch" type="xml">
+                <form string="Village">
+                    <group>
+                        <field name="name" />
+                        <field name="district_name" />
+                        <field name="country_id" />
+                        <field name="description" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window.view" id="action_sponsorship_view_form_child">
             <field name="sequence" eval="4"/>
             <field name="view_mode">form</field>
@@ -394,7 +410,7 @@
             <field name="name">Children</field>
             <field name="res_model">res.partner</field>
             <field name="search_view_id" ref="view_res_partner_sponsor_filter"/>
-            <field name="context">{"search_default_sponsored_child": 1, "default_sponsored_child": True}</field>
+            <field name="context">{"search_default_sponsored_child": 1, "default_sponsored_child": True, 'default_customer' : False}</field>
         </record>
 
 

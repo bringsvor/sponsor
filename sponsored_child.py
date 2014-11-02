@@ -47,7 +47,13 @@ class SponsoredChild(models.Model):
         return filter(lambda visit: visit.include_in_letter, all_visits)
 
     def sponsor_names(self):
-        return [x.sponsor_id.name for x in self.sponsors]
+        retval = []
+        for sponsorship in self.sponsors:
+            if sponsorship.sub_sponsor_id:
+                retval.append(sponsorship.sub_sponsor_id.name)
+            else:
+                retval.append(sponsorship.sponsor_id.name)
+        return retval
 
     @api.one
     def _get_address(self):
@@ -134,6 +140,12 @@ class SponsoredChild(models.Model):
 class Village(models.Model):
     _name = 'village'
 
+
+    @api.model
+    # @api.returns('account.analytic.journal', lambda r: r.id)
+    def _get_gambia(self):
+        return self.env['res.country'].search([('code', '=', 'GM')], limit=1)
+
     @api.one
     def village_address(self):
         print "VILLAGE ADDRESS", self.child_address
@@ -150,10 +162,10 @@ class Village(models.Model):
         }
         self.child_address = address
 
-    name = fields.Char(string = _('Village'))
-    district_name = fields.Char(string = _('District'))
+    name = fields.Char(string = _('Village'), required=True)
+    district_name = fields.Char(string = _('District'), required=True)
 
-    country_id = fields.Many2one('res.country', _('Country'), ondelete='restrict')
+    country_id = fields.Many2one('res.country', _('Country'), ondelete='restrict', default=_get_gambia, required=True)
     description = fields.Char(string = _('Village description'))
     child_address = fields.Char(string = 'Address', readonly=True, compute=_get_address)
 
