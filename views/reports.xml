@@ -54,6 +54,8 @@
                 </div>
             </div>
         -->
+
+
             <table class="table table-condensed">
                 <!--
                 <thead>
@@ -67,6 +69,9 @@
                     </tr>
                 </thead> -->
                 <tbody class="invoice_tbody">
+                    <tr>
+                        <td colspan="2" width="100%"><p align="center"><h1>Sponsorbevis</h1></p></td>
+                    </tr>
                     <tr>
                         <td width="50%">
 

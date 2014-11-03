@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_village,access_village,model_village,group_sponsor_users,1,1,1,1
+access_school,access_school,model_school,group_sponsor_users,1,1,1,1
+access_child_info,access_child_info,model_child_info,group_sponsor_users,1,1,1,1
+access_sponsorship,access_sponsorship,model_sponsorship,group_sponsor_users,1,1,1,1
+access_account_invoice_report,account.invoice.report,account.model_account_invoice_report,group_sponsor_users,1,0,0,0

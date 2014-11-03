@@ -32,6 +32,8 @@ Module to handle sponsored children. Human Aid.
 """,
     'depends': ['account', 'document_images', 'document_images_on_partner'],
     'data': [
+        'security/sponsor_security.xml',
+        'security/ir.model.access.csv',
         'views/partner.xml',
         'views/wizard_view.xml',
         'child_workflow.xml',
