@@ -16,9 +16,9 @@
             <field name="name">draft</field>
         </record>
 
-        <record id="act_open" model="workflow.activity">
+        <record id="act_active" model="workflow.activity">
             <field name="wkf_id" ref="wkf"/>
-            <field name="name">open</field>
+            <field name="name">active</field>
             <field name="action">action_validate()</field>
             <field name="kind">function</field>
         </record>
@@ -34,20 +34,20 @@
 
         <record id="t4" model="workflow.transition">
             <field name="act_from" ref="act_draft"/>
-            <field name="act_to" ref="act_open"/>
-            <field name="signal">child_open</field>
+            <field name="act_to" ref="act_active"/>
+            <field name="signal">child_active</field>
         </record>
 
         <record id="t9" model="workflow.transition">
-            <field name="act_from" ref="act_open"/>
+            <field name="act_from" ref="act_active"/>
             <field name="act_to" ref="act_inactive"/>
             <field name="signal">child_inactive</field>
         </record>
 
         <record id="t8" model="workflow.transition">
             <field name="act_from" ref="act_inactive"/>
-            <field name="act_to" ref="act_draft"/>
-            <field name="signal">child_draft</field>
+            <field name="act_to" ref="act_active"/>
+            <field name="signal">child_reopen</field>
         </record>
 </data>
 </openerp>

@@ -47,14 +47,20 @@ class SponsoredChild(models.Model):
         return filter(lambda visit: visit.include_in_letter, all_visits)
 
     def sponsor_names(self):
-        return [x.sponsor_id.name for x in self.sponsors]
+        retval = []
+        for sponsorship in self.sponsors:
+            if sponsorship.sub_sponsor_id:
+                retval.append(sponsorship.sub_sponsor_id.name)
+            else:
+                retval.append(sponsorship.sponsor_id.name)
+        return retval
 
     @api.one
     def _get_address(self):
         self.child_address = self.village.child_address
 
     child_address = fields.Char(string = _('Address'), compute=_get_address)
-    sponsored_child = fields.Boolean(string = _('Sponsored Child'))
+    sponsored_child = fields.Boolean(string = _('Child'))
     gender = fields.Selection(string = _('Gender'), selection=[('male', _('Male')), ('female', _('Female'))])
     school = fields.Many2one('school', _('School'), ondelete='restrict', track_visibility='onchange')
     date_of_birth = fields.Date(string = _('Date of birth'))
@@ -75,12 +81,12 @@ class SponsoredChild(models.Model):
 
     state = fields.Selection([
         ('draft',_('Draft')),
-        ('open',_('Open')),
+        ('active',_('Active')),
         ('inactive', _('Inactive'))],
         string=_('Status'), index=True, readonly=True, default='draft',
         track_visibility='onchange', copy=False,
         help = _("* The 'Draft' state is used when a child is just entered into the system.\n"
-        "* The 'Open' state is when a child has been approved and is active.\n"
+        "* The 'Active' state is when a child has been approved and is active.\n"
         "* The 'Inactive' state is when a child is no longer active.\n")
     )
 
@@ -90,7 +96,7 @@ class SponsoredChild(models.Model):
 
     @api.one
     def action_validate(self):
-        self.state = 'open'
+        self.state = 'active'
 
     @api.one
     def action_inactive(self):
@@ -134,6 +140,12 @@ class SponsoredChild(models.Model):
 class Village(models.Model):
     _name = 'village'
 
+
+    @api.model
+    # @api.returns('account.analytic.journal', lambda r: r.id)
+    def _get_gambia(self):
+        return self.env['res.country'].search([('code', '=', 'GM')], limit=1)
+
     @api.one
     def village_address(self):
         print "VILLAGE ADDRESS", self.child_address
@@ -150,10 +162,10 @@ class Village(models.Model):
         }
         self.child_address = address
 
-    name = fields.Char(string = _('Village'))
-    district_name = fields.Char(string = _('District'))
+    name = fields.Char(string = _('Village'), required=True)
+    district_name = fields.Char(string = _('District'), required=True)
 
-    country_id = fields.Many2one('res.country', _('Country'), ondelete='restrict')
+    country_id = fields.Many2one('res.country', _('Country'), ondelete='restrict', default=_get_gambia, required=True)
     description = fields.Char(string = _('Village description'))
     child_address = fields.Char(string = 'Address', readonly=True, compute=_get_address)
 
