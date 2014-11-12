@@ -30,7 +30,7 @@ Sponsorship
 
 Module to handle sponsored children. Human Aid.
 """,
-    'depends': ['account', 'document_images', 'document_images_on_partner'],
+    'depends': ['account', 'document_images', 'document_images_on_partner', 'report'],
     'data': [
         'security/sponsor_security.xml',
         'security/ir.model.access.csv',
@@ -47,7 +47,8 @@ Module to handle sponsored children. Human Aid.
         'test/add_sponsorship_wizard.yml',
         'test/sponsor_info.yml',
         'test/child.yml',
-        'test/images.yml'
+        'test/images.yml',
+        'test/needs_sponsor.yml',
     ],
     'installable': True,
     'auto_install': False,

@@ -151,6 +151,7 @@
 
                         </group>
                         <group colspan="2" attrs="{'invisible':[('sponsored_child','!=',True)]}">
+                            <field name="create_date" readonly="1" />
                             <field name="gender" widget="selection"/>
                             <field name="date_of_birth"/>
                             <field name="birthyear"/>
@@ -177,12 +178,11 @@
             <field name="model">res.partner</field>
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
-                <tree string="Members">
+                <tree string="Children">
+                    <field name="child_ident" />
                     <field name="name"/>
-<!--                    <field name="membership_state"/>
-                    <field name="associate_member" attrs="{'invisible':[('membership_state', '!=', 'none')]}"/>
-                    <field name="membership_start"/>
-                    <field name="membership_stop"/> -->
+                    <field name="village" />
+                    <field name="needs_sponsor" />
                     <field name="user_id" invisible="1"/>
                 </tree>
             </field>
@@ -274,7 +274,7 @@
                     <group>
                         <field name="start_date" />
                         <field name="end_date" />
-                        <field name="sponsor_id" />
+                        <field name="sponsor_id" context="{'default_sponsor': True}" />
                         <field name="sub_sponsor_id"  context="{'default_sub_sponsor': True}" />
                     </group>
                 </form>
@@ -291,7 +291,7 @@
                         <field name="start_date" />
                         <field name="end_date" />
                         <field name="child_ident" />
-                        <field name="sponsored_child" />
+                        <field name="sponsored_child" context="{'default_child': True}" />
                         <field name="sub_sponsor_id"  context="{'default_sub_sponsor': 'True'}" />
                     </group>
                 </form>

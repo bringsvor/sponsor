@@ -5,8 +5,11 @@
         model="res.partner"
         string="Sponsorship Report"
         name="sponsor.report_sponsorship_view"
-        file="sponsor.report_sponsorship"
-        report_type="qweb-pdf" />
+        file="sponsor.report_sponsorship(object.childid)"
+        report_type="qweb-pdf"
+        attachment_use="True"
+        attachment="(object.report_filename)"
+            />
 
 
 

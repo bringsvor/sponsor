@@ -13,7 +13,23 @@ class SponsoredChild(models.Model):
     @api.one
     @api.depends('sponsors')
     def _calc_needs_sponsor(self):
-        self.needs_sponsor = len(self.sponsors) == 0
+        """
+        This is true if we have no sponsorships, or they ara all ended.
+        """
+        print "NEEDS SPONSOR 1", len(self.sponsors)
+        for s in self.sponsors:
+            print "NEEDS SPONSOR", s.start_date, s.end_date
+        if not len(self.sponsors):
+            self.needs_sponsor = True
+            return
+
+        needs_sponsor = True
+        for sponsorship in self.sponsors:
+            print "NEEDS SPONSOR", sponsorship.end_date
+            if not sponsorship.end_date:
+                needs_sponsor = False
+                print "NEEDS SPONSOR NOT"
+        self.needs_sponsor = needs_sponsor
 
     @api.one
     @api.depends('date_of_birth', 'birthyear')
@@ -59,6 +75,10 @@ class SponsoredChild(models.Model):
     def _get_address(self):
         self.child_address = self.village.child_address
 
+    @api.one
+    def _calc_report_filename(self):
+        self.report_filename = 'sponsorship-%s-2014' % (self.child_ident)
+
     child_address = fields.Char(string = _('Address'), compute=_get_address)
     sponsored_child = fields.Boolean(string = _('Child'))
     gender = fields.Selection(string = _('Gender'), selection=[('male', _('Male')), ('female', _('Female'))])
@@ -78,6 +98,9 @@ class SponsoredChild(models.Model):
 
     sponsors = fields.One2many('sponsorship', 'sponsored_child')
     child_ident = fields.Char(string = _('Child Code'))
+
+    report_filename = fields.Char(string = _('Filename for sponsor reports'), compute='_calc_report_filename')
+
 
     state = fields.Selection([
         ('draft',_('Draft')),
