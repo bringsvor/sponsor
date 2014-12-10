@@ -3,3 +3,5 @@ import partner
 import wizards
 
 from . import controllers
+
+import product

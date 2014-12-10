@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="sponsorship_product_form" model="ir.ui.view">
+            <field name="name">sponsorship.product.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id">product_template_form_view</field>
+            <field name="arch" type="xml">
+                <field name="list_price" position="after">
+                    <field name="sponsorship" />
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

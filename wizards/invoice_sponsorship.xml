@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record id="view_sponsorship_invoice_view" model="ir.ui.view">
+            <field name="name">sponsorship.invoice.view.form</field>
+            <field name="model">sponsorship.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Sponsorship Invoice">
+                    <group>
+                        <field name="product_id" domain="[('sponsorship','=',True)]" context="{'default_sponsorship' : True}" /> <!-- widget="selection" />--> <!-- on_change="onchange_product(product_id)"/> -->
+                        <field name="sponsorship_price"/>
+                    </group>
+                    <footer>
+                        <button string="Invoice Sponsorship" name="sponsorship_invoice" type="object" class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sponsorship_invoice_view" model="ir.actions.act_window">
+            <field name="name">Invoice Membership</field>
+            <field name="res_model">sponsorship.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sponsorship_invoice_view"/>
+            <field name="target">new</field>
+        </record>
+
+<!--
+        <act_window name="Invoice Sponsorship"
+            res_model="sponsorship.invoice"
+            src_model="res.partner"
+            multi="True"
+            key2="client_action_multi"
+            view_mode="form"
+            id="action_sponsorship_invoice_view"/>
+-->
+    </data>
+    </openerp>

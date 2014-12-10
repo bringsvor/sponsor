@@ -129,5 +129,5 @@ class Sponsor(models.Model):
     sponsored_children = fields.One2many('sponsorship', 'sponsor_id', string='Sponsored Children')
     sponsor_info = fields.Html(string = 'Information')
     sponsor = fields.Boolean(string = 'Sponsor')
-
+    last_invoiced = fields.Date(string = 'Last invoiced', default='01-01-1900')
     # TODO Clean this up

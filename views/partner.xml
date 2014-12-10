@@ -144,6 +144,8 @@
                             <field name="sponsored_child" readonly="1"/>
                         </group>
                         <group colspan="1" attrs="{'invisible':[('sponsor','!=',True)]}">
+                            <label for="last_invoiced" />
+                            <field name="last_invoiced" />
                             <label for="sponsored_children"/>
                             <field name="sponsored_children"  nolabel="1" colspan="4"
                                    context="{'form_view_ref' : 'sponsor.form_sponsorship_child', 'tree_view_ref' : 'sponsor.list_sponsorship'}"/>
@@ -447,7 +449,7 @@
         <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Children" action="action_children" />
         <menuitem id="menu_sponsorship_sponsors" parent="menu_sponsorship_content" name="Sponsors" action="action_sponsors" />
         <menuitem id="menu_sponsorship_sponsorships" parent="menu_sponsorship_content" name="Sponsorships" action="action_sponsorships" />
-
+        <menuitem id="menu_sponsorship_invoice" parent="menu_sponsorship_content" name="Invoicing" action="action_sponsorship_invoice_view" />
 
     </data>
     </openerp>
