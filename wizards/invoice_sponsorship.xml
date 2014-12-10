@@ -39,5 +39,6 @@
             view_mode="form"
             id="action_sponsorship_invoice_view"/>
 -->
+        <menuitem id="menu_sponsorship_invoice" parent="menu_sponsorship_content" name="Invoicing" action="action_sponsorship_invoice_view" />
     </data>
     </openerp>

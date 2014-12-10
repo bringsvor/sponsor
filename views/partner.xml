@@ -449,7 +449,6 @@
         <menuitem id="menu_sponsorship_children" parent="menu_sponsorship_content" name="Children" action="action_children" />
         <menuitem id="menu_sponsorship_sponsors" parent="menu_sponsorship_content" name="Sponsors" action="action_sponsors" />
         <menuitem id="menu_sponsorship_sponsorships" parent="menu_sponsorship_content" name="Sponsorships" action="action_sponsorships" />
-        <menuitem id="menu_sponsorship_invoice" parent="menu_sponsorship_content" name="Invoicing" action="action_sponsorship_invoice_view" />
 
     </data>
     </openerp>
