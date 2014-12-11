@@ -84,6 +84,7 @@ class SponsoredChild(models.Model):
 
     @api.one
     def _calc_visible_images(self):
+        self.visible_image_ids = self.image_ids
         rv = []
         for image in self.image_ids:
             if not image.visible:
