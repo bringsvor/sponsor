@@ -89,7 +89,7 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="parent_id" position="before"  attrs="{'invisible':[('sponsored_child','!=',True)]}">
-                    <field name="child_ident" placeholder="Child ident..." attrs="{'invisible':[('sponsored_child','!=',True)],'required' : [('sponsored_child', '=', True)]}"/>
+                    <field name="child_ident" placeholder="Child ident..." attrs="{'invisible':[('sponsored_child','!=',True)],'required' : [('state', '!=', 'draft'),('sponsored_child', '=', True)]}"/>
                     <div>
                         <div class="oe_button_box oe_right" attrs="{'invisible':[('sponsored_child','!=',True)]}">
                         <field name="state" widget="statusbar" statusbar_visible="draft,active,inactive"
@@ -159,6 +159,8 @@
                             <field name="birthyear"/>
                             <field name="school"/>
                             <field name="school_class"/>
+                            <field name="last_schoolclass_update" readonly="1" />
+                            <field name="last_schoolclass_update_year" readonly="1" />
                             <field name="text_info"/>
                             <field name="needs_sponsor" readonly="1"/>
                             <group colspan="2" string="Parents">
@@ -181,7 +183,7 @@
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
                 <tree string="Children">
-                    <field name="child_ident" />
+                    <!-- <field name="child_ident" /> -->
                     <field name="name"/>
                     <field name="village" />
                     <field name="needs_sponsor" />
@@ -260,6 +262,7 @@
                 <tree string="Sponsorships">
                     <field name="child_ident" />
                     <field name="sponsored_child" />
+                    <field name="sponsor_id" />
                     <field name="sub_sponsor_id">
                         <field name="name" />
                             </field>
@@ -349,6 +352,7 @@
                     <group expand="0" string="Group By" colspan="10" col="8">
                         <filter string="Village" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'village'}"/>
                         <filter string="School" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'school'}"/>
+                        <filter string="Last class update" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'last_schoolclass_update_year'}"/>
 <!--                        <filter string="Salesperson" icon="terp-personal" domain="[]" context="{'group_by' : 'user_id'}"/>
                         <filter string="Associate Member" name = "associate" icon="terp-partner" domain="[]" context="{'group_by':'associate_member'}"/>
                         <filter string=" Membership State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'membership_state'}"/>

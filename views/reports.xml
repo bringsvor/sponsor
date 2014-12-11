@@ -12,6 +12,12 @@
             />
 
 
+<template id="my_assets_id" name="Assets for sponsorship report" inherit_id="report.layout">
+    <xpath expr="//head" position="inside">
+        <!-- <xpath expr="." position="inside"> -->
+        <link rel="stylesheet" href="/sponsor/static/src/css/sponsor.css"/>
+        </xpath>
+    </template>
 
 <template id="report_sponsorship_document">
 <!--    <t t-call="report.external_layout"> -->
@@ -73,7 +79,7 @@
                 </thead> -->
                 <tbody class="invoice_tbody">
                     <tr>
-                        <td colspan="2" width="100%"><p align="center"><h1>Sponsorbevis</h1></p></td>
+                        <td colspan="2" width="100%"><p class="test" id="test" align="center"><h1 align="center" class="test">Fadderbevis</h1></p></td>
                     </tr>
                     <tr>
                         <td width="50%">
@@ -111,7 +117,7 @@
 
                         </td>
                         <td width="50%">
-                            <t t-foreach="o.image_ids" t-as="img">
+                            <t t-foreach="o.visible_image_ids" t-as="img">
                                 <div t-if="img_first">
                                     <figure  style="display: inline-block;">
                                         <img t-att-src="'/web/binary/image?model=ir.attachment&amp;field=image_data&amp;id=' + str(img.id)" widget="image" height="256" class="pull_right cal_avatar"/>
