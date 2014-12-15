@@ -145,7 +145,7 @@
                         </group>
                         <group colspan="1" attrs="{'invisible':[('sponsor','!=',True)]}">
                             <label for="last_invoiced" />
-                            <field name="last_invoiced" />
+                            <field name="last_invoiced" nolabel="1"/>
                             <label for="sponsored_children"/>
                             <field name="sponsored_children"  nolabel="1" colspan="4"
                                    context="{'form_view_ref' : 'sponsor.form_sponsorship_child', 'tree_view_ref' : 'sponsor.list_sponsorship'}"/>
@@ -168,7 +168,7 @@
                                 <field name="father"/>
                             </group>
                             <field name="sponsors" colspan="4" nolabel="1"
-                                   context="{'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
+                                   context="{'search_default_sponsored_child_needs' : 1, 'form_view_ref' : 'sponsor.sponsorship_form_view', 'tree_view_ref' : 'sponsor.list_sponsorship_sponsor'}"/>
                         </group>
                         <!-- <button name="%(action_add_sponsorship)d" type="action" string="Add sponsorship" class="oe_highlight"  attrs="{'invisible':[('sponsor','!=',True)]}" /> -->
                     </page>
@@ -183,7 +183,7 @@
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
                 <tree string="Children">
-                    <!-- <field name="child_ident" /> -->
+                    <field name="child_ident" />
                     <field name="name"/>
                     <field name="village" />
                     <field name="needs_sponsor" />
@@ -298,7 +298,7 @@
                         <field name="start_date" />
                         <field name="end_date" />
                         <field name="child_ident" />
-                        <field name="sponsored_child" context="{'default_child': True}" />
+                        <field name="sponsored_child" context="{'search_default_sponsored_child_needs' : 1, 'default_child': True}" />
                         <field name="sub_sponsor_id"  context="{'default_sub_sponsor': 'True'}" />
                     </group>
                 </form>
@@ -349,6 +349,7 @@
             <field name="arch" type="xml">
                 <search string="Sponsor Partners">
                     <field name="sponsor" invisible="1"/>
+                    <field name="state" invisible="1" />
                     <field name="sponsored_child" invisible="1"/>
 <!--                    <field name="membership_stop" string="End Membership Date"/> -->
                     <field name="name"
@@ -359,6 +360,7 @@
                     <separator/>
                     <filter string="Children" name="sponsored_child" icon="terp-personal" domain="[('sponsored_child','=',1)]" help="Sponsored Chilren Partners"/>
                     <filter string="Children needing sponsor" name="sponsored_child_needs" icon="terp-personal" domain="[('sponsored_child','=',1), ('needs_sponsor', '=', 1)]" help="Sponsored Chilren Needing Sponsors"/>
+                    <filter string="Active" name="child_active" icon="terp-personal" domain="[('state','!=', 'inactive')]" help="State active" />
                     <separator/>
 
 <!--                    <filter icon="terp-personal" name="all_non_members" domain="[('membership_state', 'in', ['none','canceled','old','waiting'])]" string="All non Members" help="None/Canceled/Old/Waiting"/>
