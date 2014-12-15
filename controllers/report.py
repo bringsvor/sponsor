@@ -20,10 +20,13 @@ class SponsorReportController(ReportController):
 
 
         object = partner_obj.browse([int(x) for x in docids.split(',')])
-        object = [x for x in object if x.sponsored_child]
+        #object = [x for x in object if x.sponsored_child]
         if len(object)>0:
             response = ReportController().report_download(data, token)
-            filename = object[0].report_filename
+            try:
+                filename = object[0].report_filename
+            except:
+                filename = 'report'
 
             response.headers.set('Content-Disposition', 'attachment; filename=%s.pdf;' % filename)
             return response

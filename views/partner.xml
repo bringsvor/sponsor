@@ -261,6 +261,8 @@
             <field name="arch" type="xml">
                 <tree string="Sponsorships">
                     <field name="child_ident" />
+                    <field name="start_date" />
+                    <field name="end_date" />
                     <field name="sponsored_child" />
                     <field name="sponsor_id" />
                     <field name="sub_sponsor_id">
@@ -328,6 +330,18 @@
             <!-- <field name="act_window_id" ref="action_sponsors"/> -->
         </record>
 
+        <record id="view_sponsorship_filter" model="ir.ui.view">
+            <field name="name">sponsorship.select</field>
+            <field name="model">sponsorship</field>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <search string="Sponsorships">
+                    <filter string="Active" name="active" icon="terp-personal" domain="[('end_date', '=', False)]" help="Sponsorships that are active" />
+                </search>
+            </field>
+        </record>
+
+
         <record id="view_res_partner_sponsor_filter" model="ir.ui.view">
             <field name="name">res.partner.select</field>
             <field name="model">res.partner</field>
@@ -366,9 +380,9 @@
 
         <record id="action_sponsorships" model="ir.actions.act_window">
             <field name="name">Sponsorships</field>
-            <field name="res_model">sponsorship</field> <!--
-            <field name="search_view_id" ref="view_sponsorhip_filter"/>
-            <field name="context">{"search_default_sponsor": 1, "default_sponsor": True}</field> -->
+            <field name="res_model">sponsorship</field>
+            <field name="search_view_id" ref="view_sponsorship_filter"/>
+            <field name="context">{"search_default_active": 1, "default_active": True}</field>
         </record>
 
 
