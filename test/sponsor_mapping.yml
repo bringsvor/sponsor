@@ -27,7 +27,7 @@
 -
   http://www.zbeanztech.com/blog/how-effective-yaml-testing-openerp
 -
-  !assert {model: res.partner, id: child1}:
+  !assert {model: res.partner, id: child2}:
     - needs_sponsor == False
 -
   Check the sponsor history

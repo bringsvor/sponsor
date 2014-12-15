@@ -5,7 +5,9 @@ __author__ = 'tbri'
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 import openerp.addons.decimal_precision as dp
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class SponsoredChild(models.Model):
     _inherit = 'res.partner'
@@ -13,7 +15,23 @@ class SponsoredChild(models.Model):
     @api.one
     @api.depends('sponsors')
     def _calc_needs_sponsor(self):
-        self.needs_sponsor = len(self.sponsors) == 0
+        """
+        This is true if we have no sponsorships, or they ara all ended.
+        """
+        print "NEEDS SPONSOR 1", len(self.sponsors)
+        for s in self.sponsors:
+            print "NEEDS SPONSOR", s.start_date, s.end_date
+        if not len(self.sponsors):
+            self.needs_sponsor = True
+            return
+
+        needs_sponsor = True
+        for sponsorship in self.sponsors:
+            print "NEEDS SPONSOR", sponsorship.end_date
+            if not sponsorship.end_date:
+                needs_sponsor = False
+                print "NEEDS SPONSOR NOT"
+        self.needs_sponsor = needs_sponsor
 
     @api.one
     @api.depends('date_of_birth', 'birthyear')
@@ -59,6 +77,30 @@ class SponsoredChild(models.Model):
     def _get_address(self):
         self.child_address = self.village.child_address
 
+    @api.one
+    def _calc_report_filename(self):
+        self.report_index = self.report_index + 1
+        self.report_filename = 'sponsorship-%s-2014-%d' % (self.child_ident, self.report_index)
+
+    @api.one
+    def _calc_visible_images(self):
+        self.visible_image_ids = self.image_ids
+        rv = []
+        for image in self.image_ids:
+            if not image.visible:
+                continue
+            rv.append(image.id)
+        self.visible_image_ids = rv
+
+    @api.multi
+    @api.depends('last_schoolclass_update')
+    def _calc_schoolclass_update_year(self):
+        for child in self:
+            if child.last_schoolclass_update:
+                los_datos = fields.Date.from_string(child.last_schoolclass_update)
+                _logger.info('Calc schoolclass update year %s' % (los_datos))
+                child.last_schoolclass_update_year = los_datos.year
+
     child_address = fields.Char(string = _('Address'), compute=_get_address)
     sponsored_child = fields.Boolean(string = _('Child'))
     gender = fields.Selection(string = _('Gender'), selection=[('male', _('Male')), ('female', _('Female'))])
@@ -66,6 +108,8 @@ class SponsoredChild(models.Model):
     date_of_birth = fields.Date(string = _('Date of birth'))
     birthyear = fields.Integer(string = _('Birthyear'))
     school_class = fields.Char(string = _('Class in school'), track_visibility='onchange')
+    last_schoolclass_update = fields.Date('Last schoolclass update', readonly=True)
+    last_schoolclass_update_year = fields.Char('Year of last schoolclass update', compute='_calc_schoolclass_update_year', store=True)
     text_info = fields.One2many('child_info', 'sponsored_child')
     village = fields.Many2one('village', _('Village'), ondelete='restrict', track_visibility='onchange')
 
@@ -79,6 +123,10 @@ class SponsoredChild(models.Model):
     sponsors = fields.One2many('sponsorship', 'sponsored_child')
     child_ident = fields.Char(string = _('Child Code'))
 
+    report_index = fields.Integer(string = 'Number of times printed.', default=1)
+    report_filename = fields.Char(string = _('Filename for sponsor reports'), compute='_calc_report_filename')
+    visible_image_ids = fields.One2many('ir.attachment', compute='_calc_visible_images')
+
     state = fields.Selection([
         ('draft',_('Draft')),
         ('active',_('Active')),
@@ -90,12 +138,29 @@ class SponsoredChild(models.Model):
         "* The 'Inactive' state is when a child is no longer active.\n")
     )
 
+    @api.constrains('child_ident', 'state')
+    def unique_child_ident(self):
+        if self.state == 'active':
+            check = self.search([('child_ident', '=', self.child_ident)])
+            if len(check) == 0:
+                raise Warning('There already exists a child with the child ident %s : %s' % (self.child_ident, check[0].name))
+
+
+
     @api.one
     def action_draft(self):
         self.state = 'draft'
 
     @api.one
     def action_validate(self):
+        if not self.child_ident:
+            seq_obj = self.env['ir.sequence'].search([('code', '=', 'sponsor.child_id')])
+            #number = seq_obj.number_next_actual()
+            #number = seq_obj.get('sponsor.child_id')
+            number = seq_obj.next_by_code('sponsor.child_id')
+            _logger.info('Retrieved child code %s' % number)
+            self.child_ident = number
+
         self.state = 'active'
 
     @api.one
@@ -114,6 +179,12 @@ class SponsoredChild(models.Model):
         print "PICS", self.image_ids
         return self.env['report'].get_action(self, 'sponsor.report_sponsorship_view')
 
+    def write(self, cr, uid, id, vals, context=None, check=True, update_check=True):
+        if 'school_class' in vals or 'school' in vals:
+            vals['last_schoolclass_update'] = fields.Date.today()
+            #self.write(cr, uid, id, {'last_schoolclass_update' : fields.Date.today()})
+        _logger.info('Write called with values %s' % ','.join(vals.keys()))
+        return super(SponsoredChild, self).write(cr, uid, id, vals, context, check, update_check)
 
     def Xwrite(self, cr, uid, id, vals, context=None, check=True, update_check=True):
         body = ''

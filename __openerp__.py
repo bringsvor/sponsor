@@ -30,7 +30,7 @@ Sponsorship
 
 Module to handle sponsored children. Human Aid.
 """,
-    'depends': ['account', 'document_images', 'document_images_on_partner'],
+    'depends': ['account', 'document', 'document_images', 'document_images_on_partner', 'report', 'web'],
     'data': [
         'security/sponsor_security.xml',
         'security/ir.model.access.csv',
@@ -40,6 +40,9 @@ Module to handle sponsored children. Human Aid.
         #'views/sponsor_letter.xml',
         'views/reports.xml',
         'views/mailing_report.xml',
+        'wizards/invoice_sponsorship.xml',
+        'data/sponsorship_data.xml',
+        'views/ir_attachment.xml',
     ],
     'demo': [],
     'test': [
@@ -47,8 +50,11 @@ Module to handle sponsored children. Human Aid.
         'test/add_sponsorship_wizard.yml',
         'test/sponsor_info.yml',
         'test/child.yml',
-        'test/images.yml'
+        'test/images.yml',
+        'test/needs_sponsor.yml',
     ],
+
+    'qweb': ['static/src/xml/*.xml'],
     'installable': True,
     'auto_install': False,
 }

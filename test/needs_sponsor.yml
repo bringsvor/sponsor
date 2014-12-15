@@ -1,0 +1,37 @@
+-
+  Then we create a sponsor
+-
+  !record {model: res.partner, id: sponsor9}:
+    name: 'Donald Duck'
+-
+  Make a child
+-
+  !record {model: res.partner, id: child5}:
+    name: 'Bamba'
+    gender: 'female'
+    sponsored_child: True
+    sponsors:
+      - start_date: '2014-01-01'
+        end_date: '2014-08-08'
+        sponsor_id: sponsor9
+
+-
+    And another child
+-
+  !record {model: res.partner, id: child6}:
+    name: 'Samba'
+    gender: 'female'
+    sponsored_child: True
+    sponsors:
+      - start_date: '2014-01-01'
+        sponsor_id: sponsor9
+-
+  One needs sponsor,
+-
+  !assert {model: res.partner, id: child5, string: 'Child has no sponsor assigned'}:
+    - needs_sponsor == True
+-
+     the other one doesn't
+-
+  !assert {model: res.partner, id: child6, string: 'Child has a sponsor assigned'}:
+    - needs_sponsor == False
