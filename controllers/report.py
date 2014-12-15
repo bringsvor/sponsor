@@ -17,9 +17,16 @@ class SponsorReportController(ReportController):
 
         reportname, docids = reportname.split('/')
         assert docids
-        object = partner_obj.browse(int(docids))
-        response = ReportController().report_download(data, token)
-        filename = object.report_filename
 
-        response.headers.set('Content-Disposition', 'attachment; filename=%s.pdf;' % filename)
-        return response
+
+        object = partner_obj.browse([int(x) for x in docids.split(',')])
+        object = [x for x in object if x.sponsored_child]
+        if len(object)>0:
+            response = ReportController().report_download(data, token)
+            filename = object[0].report_filename
+
+            response.headers.set('Content-Disposition', 'attachment; filename=%s.pdf;' % filename)
+            return response
+        else:
+            # TODO issue a 302 to somewhere
+            raise Warning('Illegal selection', 'One or more sponsored children must be selected.')
