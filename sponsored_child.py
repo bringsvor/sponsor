@@ -13,11 +13,15 @@ class SponsoredChild(models.Model):
     _inherit = 'res.partner'
 
     @api.one
-    @api.depends('sponsors')
+    @api.depends('sponsors', 'state')
     def _calc_needs_sponsor(self):
         """
         This is true if we have no sponsorships, or they ara all ended.
         """
+        if self.state != 'active':
+            self.needs_sponsor = False
+            return
+
         print "NEEDS SPONSOR 1", len(self.sponsors)
         for s in self.sponsors:
             print "NEEDS SPONSOR", s.start_date, s.end_date

@@ -29,6 +29,9 @@ class sponsorship_invoice(models.TransientModel):
                 continue
             lines = []
             for sponsorship in sponsor.sponsored_children:
+                if sponsorship.sponsored_child.state != 'active':
+                    continue
+
                 if sponsorship.end_date:
                     continue
 
@@ -42,15 +45,16 @@ class sponsorship_invoice(models.TransientModel):
                     'name' : line_text,
                     'product_id' : self.product_id.id,
                     'price_unit' : self.sponsorship_price,
-                    'quantity' : number_of_sponsorships,
+                    'quantity' : 1,
                 }
                 lines.append((0,0, line))
 
-            invoice_info = {'partner_id' : sponsor.id,
-                            'account_id' : sponsor.property_account_receivable.id,
-                            'invoice_line' : lines,
-                            'comment' : 'Takk for at du støtter vårt arbeid',
-                        }
-            self.env['account.invoice'].create(invoice_info)
+            if len(lines)>0:
+                invoice_info = {'partner_id' : sponsor.id,
+                                'account_id' : sponsor.property_account_receivable.id,
+                                'invoice_line' : lines,
+                                'comment' : 'Takk for at du støtter vårt arbeid',
+                            }
+                self.env['account.invoice'].create(invoice_info)
 
-            sponsor.last_invoiced = fields.Date.today()
+                sponsor.last_invoiced = fields.Date.today()

@@ -148,7 +148,7 @@
                             <field name="last_invoiced" nolabel="1"/>
                             <label for="sponsored_children"/>
                             <field name="sponsored_children"  nolabel="1" colspan="4"
-                                   context="{'form_view_ref' : 'sponsor.form_sponsorship_child', 'tree_view_ref' : 'sponsor.list_sponsorship'}"/>
+                                   context="{'search_default_sponsored_child_needs' : 1, 'form_view_ref' : 'sponsor.form_sponsorship_child', 'tree_view_ref' : 'sponsor.list_sponsorship'}"/>
 
 
                         </group>
@@ -298,7 +298,7 @@
                         <field name="start_date" />
                         <field name="end_date" />
                         <field name="child_ident" />
-                        <field name="sponsored_child" context="{'search_default_sponsored_child_needs' : 1, 'default_child': True}" />
+                        <field name="sponsored_child" domain="[('state','=','active')]" context="{'search_default_sponsored_child_needs' : 1, 'default_child': True}" />
                         <field name="sub_sponsor_id"  context="{'default_sub_sponsor': 'True'}" />
                     </group>
                 </form>
@@ -359,7 +359,7 @@
                     <filter string="Sponsors" name="sponsor" icon="terp-personal" domain="[('sponsor','=',1)]" help="Sponsor Partners"/>
                     <separator/>
                     <filter string="Children" name="sponsored_child" icon="terp-personal" domain="[('sponsored_child','=',1)]" help="Sponsored Chilren Partners"/>
-                    <filter string="Children needing sponsor" name="sponsored_child_needs" icon="terp-personal" domain="[('sponsored_child','=',1), ('needs_sponsor', '=', 1)]" help="Sponsored Chilren Needing Sponsors"/>
+                    <filter string="Children needing sponsor" name="sponsored_child_needs" icon="terp-personal" domain="[('state','=','active'), ('sponsored_child','=',1), ('needs_sponsor', '=', 1)]" help="Sponsored Chilren Needing Sponsors"/>
                     <filter string="Active" name="child_active" icon="terp-personal" domain="[('state','!=', 'inactive')]" help="State active" />
                     <separator/>
 

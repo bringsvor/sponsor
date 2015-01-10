@@ -84,10 +84,13 @@ class SubSponsor(models.Model):
 
 
     def unlink(self, cr, uid, ids, context=None):
-        print "UNLINK"
+        print "UNLINK", ids
         retval = self.check_links(cr, uid, ids, context)
-        if retval:
-            return retval
+        for id, val in zip(ids, retval):
+            if val:
+                del ids[ids.index(id)]
+
+        print "RETVAL", retval, ids
 
         return super(SubSponsor, self).unlink(cr, uid, ids, context=context)
 
